@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English NMT Prep — Головна</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #FDF8F3;
+            --bg-warm: #F5F0E8;
+            --text: #2D2A26;
+            --text-light: #6B6560;
+            --accent-lex: #E07A5F;
+            --accent-lex-hover: #C96A52;
+            --accent-grm: #3D405B;
+            --accent-grm-hover: #2F3247;
+            --accent-green: #81B29A;
+            --card: #FFFFFF;
+            --shadow: rgba(45, 42, 38, 0.06);
+            --shadow-hover: rgba(45, 42, 38, 0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background: rgba(253, 248, 243, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(45, 42, 38, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 48px;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--accent-lex);
+        }
+
+        .cabinet-btn {
+            position: relative;
+            padding: 10px 24px;
+            background: var(--card);
+            border: 1.5px solid rgba(45, 42, 38, 0.1);
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cabinet-btn:hover {
+            border-color: var(--accent-lex);
+            box-shadow: 0 4px 16px var(--shadow-hover);
+        }
+
+        .cabinet-btn::before {
+            content: "👤";
+            font-size: 16px;
+        }
+
+        /* Dropdown Cabinet */
+        .cabinet-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            width: 340px;
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: 0 20px 60px rgba(45, 42, 38, 0.15);
+            padding: 28px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cabinet-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .cabinet-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #F4A261, #E07A5F);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .progress-section {
+            margin-bottom: 24px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+
+        .progress-label strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--bg-warm);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 50px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-fill.lex { background: linear-gradient(90deg, #F4A261, #E07A5F); }
+        .progress-fill.grm { background: linear-gradient(90deg, #81B29A, #5E8B73); }
+        .progress-fill.total { background: linear-gradient(90deg, #E07A5F, #3D405B); }
+
+        .topic-progress-list {
+            margin-top: 20px;
+            max-height: 240px;
+            overflow-y: auto;
+        }
+
+        .topic-progress-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .topic-progress-item span {
+            font-size: 13px;
+            color: var(--text-light);
+            width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topic-progress-item .progress-bar {
+            flex: 1;
+            height: 6px;
+        }
+
+        .topic-progress-item .percent {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            width: 36px;
+            text-align: right;
+        }
+
+        /* Main Content */
+        .main {
+            padding-top: 120px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding-bottom: 80px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Direction Cards */
+        .directions {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 0 24px;
+        }
+
+        .direction-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 24px var(--shadow);
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .direction-card:hover {
+            box-shadow: 0 8px 32px var(--shadow-hover);
+        }
+
+        .direction-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 28px 32px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s ease;
+        }
+
+        .direction-header:hover {
+            background: rgba(0,0,0,0.01);
+        }
+
+        .direction-header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .direction-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+        }
+
+        .lex-icon { background: rgba(224, 122, 95, 0.12); }
+        .grm-icon { background: rgba(61, 64, 91, 0.10); }
+
+        .direction-title {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .direction-subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .direction-arrow {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-warm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 18px;
+            color: var(--text-light);
+        }
+
+        .direction-card.open .direction-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Topics List */
+        .topics-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .direction-card.open .topics-list {
+            max-height: 2000px;
+        }
+
+        .topics-inner {
+            padding: 0 32px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .topic-item {
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid rgba(45, 42, 38, 0.06);
+            background: var(--bg);
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .topic-header:hover {
+            background: rgba(0,0,0,0.02);
+        }
+
+        .topic-name {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .topic-count {
+            font-size: 13px;
+            color: var(--text-light);
+            background: var(--card);
+            padding: 4px 10px;
+            border-radius: 50px;
+        }
+
+        .topic-arrow {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-left: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .topic-item.open .topic-arrow {
+            transform: rotate(90deg);
+        }
+
+        /* Subtopics */
+        .subtopics-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .topic-item.open .subtopics-list {
+            max-height: 800px;
+        }
+
+        .subtopics-inner {
+            padding: 0 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .subtopic-link {
+            display: block;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 15px;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .subtopic-link:hover {
+            background: var(--card);
+            border-left-color: var(--accent-lex);
+            padding-left: 20px;
+        }
+
+        .lex-section .subtopic-link:hover {
+            border-left-color: var(--accent-lex);
+        }
+
+        .grm-section .subtopic-link:hover {
+            border-left-color: var(--accent-grm);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header { padding: 0 20px; }
+            .main { padding-top: 100px; }
+            .hero h1 { font-size: 28px; }
+            .direction-header { padding: 20px 24px; }
+            .topics-inner { padding: 0 24px 20px; }
+            .cabinet-dropdown { width: calc(100vw - 40px); right: -10px; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(45,42,38,0.15); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">English<span>NMT</span></div>
+        <div style="position: relative;">
+            <button class="cabinet-btn" onclick="toggleCabinet()">Мій кабінет</button>
+
+            <!-- Cabinet Dropdown -->
+            <div class="cabinet-dropdown" id="cabinetDropdown">
+                <div class="cabinet-title">Твій прогрес</div>
+
+                <div class="streak-badge">
+                    🔥 12 днів підряд
+                </div>
+
+                <div class="progress-section">
+                    <div class="progress-label">
+                        <span>Загальний прогрес</span>
+                        <strong>34%</strong>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill total" style="width: 34%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-section">
+                    <div class="progress-label">
+                        <span>Лексика</span>
+                        <strong>8/35 тем</strong>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill lex" style="width: 23%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-section">
+                    <div class="progress-label">
+                        <span>Граматика</span>
+                        <strong>17/73 тем</strong>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill grm" style="width: 23%"></div>
+                    </div>
+                </div>
+
+                <div class="topic-progress-list" id="topicProgressList">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+        <div class="hero">
+            <h1>Підготовка до НМТ</h1>
+            <p>Обери напрямок, щоб розпочати навчання за темами</p>
+        </div>
+
+        <div class="directions" id="directionsContainer">
+            <!-- Generated by JS -->
+        </div>
+    </main>
+
+    <script>
+        // ==================== DATA ====================
+
+        const lexTopics = [
+            {
+                name: "PEOPLE & RELATIONSHIPS",
+                subtopics: ["Family Structure", "Romantic Relationships", "Friendship", "Personal Traits", "Behaviour", "Feelings", "Appearance"]
+            },
+            {
+                name: "HOME",
+                subtopics: ["Types of Houses", "In & Around the House", "In the Bedroom, the Living Room and the Bathroom", "In the Kitchen", "Some Home Furniture, Items & Expressions"]
+            },
+            {
+                name: "LIFESTYLE",
+                subtopics: ["Daily Routine", "Household Chores", "Healthy Lifestyle", "City Life", "Country Life"]
+            },
+            {
+                name: "CLOTHES & FASHION",
+                subtopics: ["Clothes", "Fashion & In the Clothes Shop"]
+            },
+            {
+                name: "SHOPPING",
+                subtopics: ["Shopping", "Shops and Services", "Shopping Centre"]
+            },
+            {
+                name: "FOOD & DRINKS",
+                subtopics: ["Food", "Beverages", "Products", "Eating Out", "Cooking", "Meals & Dishes"]
+            },
+            {
+                name: "HEALTH & BODY",
+                subtopics: ["Body", "Words Related to the Body", "Illnesses & Diseases", "In the Hospital", "Treatment"]
+            },
+            {
+                name: "EDUCATION",
+                subtopics: ["Education System", "At School. Part 1", "University"]
+            },
+            {
+                name: "HOLIDAYS",
+                subtopics: ["Winter Holidays & Easter", "Halloween", "Other Holidays & Events"]
+            },
+            {
+                name: "WORK & BUSINESS",
+                subtopics: ["Industries, Departments & Jobs. Part 1", "Industries, Departments & Jobs. Part 2", "Words Related to Work", "Money", "Skills to Get a Job", "Working in an Office"]
+            },
+            {
+                name: "LEISURE & HOBBIES",
+                subtopics: ["Leisure", "Sport", "Books", "Music", "Films & Series"]
+            },
+            {
+                name: "TRAVELLING",
+                subtopics: ["Travelling", "Sightseeing", "In the Hotel"]
+            },
+            {
+                name: "SOCIETY",
+                subtopics: ["In Society", "Global Problems"]
+            },
+            {
+                name: "EXPRESSING OPINION",
+                subtopics: ["Opinion & Attitude"]
+            }
+        ];
+
+        const grmTopics = [
+            {
+                name: "VERB",
+                subtopics: ["Present Tenses", "Past Tenses", "Future Tenses", "Regular and Irregular Verbs", "There Is and There Are", "Active and Passive Voice", "Have Something Done", "The Infinitive", "The Gerund", "Verbs with Gerund and Infinitive", "Participles", "Prepositional and Phrasal Verbs", "Used to. Be Used to. Get Used to", "Imperative Mood"]
+            },
+            {
+                name: "NOUN",
+                subtopics: ["Noun", "Countable and Uncountable Nouns", "Possessive Case"]
+            },
+            {
+                name: "ADJECTIVE",
+                subtopics: ["Adjective", "Comparative and Superlative Forms of Adjectives", "Types of Comparison", "Adjectives Formed with Suffixes and Prefixes"]
+            },
+            {
+                name: "ADVERB",
+                subtopics: ["Adverb", "Types and Order of Adverbs", "Too. Enough", "Quite. Rather"]
+            },
+            {
+                name: "MODALITY",
+                subtopics: ["Can. Could. Be Able to", "Should. Ought to", "Must. Have to", "May. Might", "Need", "Will. Would. Shall"]
+            },
+            {
+                name: "PRONOUN",
+                subtopics: ["Pronoun", "Reflexive Pronouns", "Indefinite Pronouns", "Relative Pronouns", "Other and Its Forms"]
+            },
+            {
+                name: "NUMBER",
+                subtopics: ["Number", "Telling Time"]
+            },
+            {
+                name: "PREPOSITION",
+                subtopics: ["Prepositions of Time", "Prepositions of Place and Movement", "Prepositions In, On, At", "Like. As"]
+            },
+            {
+                name: "DETERMINERS",
+                subtopics: ["The Indefinite Article", "The Definite Article", "Set Expressions with Articles", "Demonstratives", "A lot of. Much. Many. Few. Little", "Both. Neither. Either. All. None"]
+            },
+            {
+                name: "CLAUSE",
+                subtopics: ["Types of Questions", "Pro-clause with So and Not", "Reported Speech", "Time Clauses", "Clause of Result and Reason", "Clauses of Purpose", "Clauses of Contrast", "Exclamation", "Clauses of Manner", "Identifying and Non-identifying Clauses", "Conditionals", "Wishes", "Punctuation"]
+            },
+            {
+                name: "LINKING WORDS",
+                subtopics: ["Linking Words"]
+            },
+            {
+                name: "THE USAGE OF A CAPITAL LETTER",
+                subtopics: ["Capital Letter Rules"]
+            }
+        ];
+
+        // ==================== HELPERS ====================
+
+        function toSlug(text) {
+            return text.toLowerCase()
+                .replace(/[^\w\s\-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+
+        // ==================== RENDER ====================
+
+        function createSubtopicLink(subtopic, type) {
+            const slug = toSlug(subtopic);
+            const folder = type === 'lex' ? 'lexicon' : 'grammar';
+            return `<a href="${folder}/${slug}.html" class="subtopic-link">${subtopic}</a>`;
+        }
+
+        function createTopicItem(topic, type) {
+            const subtopicsHtml = topic.subtopics.map(st => createSubtopicLink(st, type)).join('');
+            return `
+                <div class="topic-item" data-topic="${toSlug(topic.name)}">
+                    <div class="topic-header" onclick="toggleTopic(this)">
+                        <span class="topic-name">${topic.name}</span>
+                        <div style="display:flex;align-items:center;">
+                            <span class="topic-count">${topic.subtopics.length} підтем</span>
+                            <span class="topic-arrow">›</span>
+                        </div>
+                    </div>
+                    <div class="subtopics-list">
+                        <div class="subtopics-inner">
+                            ${subtopicsHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createDirectionCard(type, title, subtitle, icon, topics) {
+            const topicsHtml = topics.map(t => createTopicItem(t, type)).join('');
+            const sectionClass = type === 'lex' ? 'lex-section' : 'grm-section';
+            return `
+                <div class="direction-card ${sectionClass}" id="dir-${type}">
+                    <div class="direction-header" onclick="toggleDirection('${type}')">
+                        <div class="direction-header-left">
+                            <div class="direction-icon ${type}-icon">${icon}</div>
+                            <div>
+                                <div class="direction-title">${title}</div>
+                                <div class="direction-subtitle">${subtitle}</div>
+                            </div>
+                        </div>
+                        <div class="direction-arrow">⌄</div>
+                    </div>
+                    <div class="topics-list">
+                        <div class="topics-inner">
+                            ${topicsHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDirections() {
+            const container = document.getElementById('directionsContainer');
+            container.innerHTML = 
+                createDirectionCard('lex', 'Лексика', '14 тематичних блоків, 35+ підтем', '📗', lexTopics) +
+                createDirectionCard('grm', 'Граматика', '12 розділів, 73 підтеми', '📘', grmTopics);
+        }
+
+        // ==================== INTERACTIONS ====================
+
+        function toggleDirection(type) {
+            const card = document.getElementById(`dir-${type}`);
+            const isOpen = card.classList.contains('open');
+
+            document.querySelectorAll('.direction-card').forEach(c => {
+                c.classList.remove('open');
+            });
+
+            if (!isOpen) {
+                card.classList.add('open');
+            }
+        }
+
+        function toggleTopic(header) {
+            const item = header.parentElement;
+            const isOpen = item.classList.contains('open');
+
+            const directionCard = item.closest('.direction-card');
+            directionCard.querySelectorAll('.topic-item').forEach(t => t.classList.remove('open'));
+
+            if (!isOpen) {
+                item.classList.add('open');
+            }
+        }
+
+        // ==================== CABINET ====================
+
+        function toggleCabinet() {
+            const dropdown = document.getElementById('cabinetDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('cabinetDropdown');
+            const btn = e.target.closest('.cabinet-btn');
+            const drop = e.target.closest('.cabinet-dropdown');
+            if (!btn && !drop) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        function renderTopicProgress() {
+            const list = document.getElementById('topicProgressList');
+            const allTopics = [
+                ...lexTopics.map(t => ({ name: t.name, type: 'lex' })),
+                ...grmTopics.map(t => ({ name: t.name, type: 'grm' }))
+            ];
+
+            const html = allTopics.slice(0, 8).map(t => {
+                const percent = Math.floor(Math.random() * 100);
+                const fillClass = t.type === 'lex' ? 'lex' : 'grm';
+                return `
+                    <div class="topic-progress-item">
+                        <span title="${t.name}">${t.name}</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill ${fillClass}" style="width: ${percent}%"></div>
+                        </div>
+                        <span class="percent">${percent}%</span>
+                    </div>
+                `;
+            }).join('');
+
+            list.innerHTML = html;
+        }
+
+        // ==================== INIT ====================
+
+        renderDirections();
+        renderTopicProgress();
+
+        setTimeout(() => {
+            document.querySelectorAll('.progress-fill').forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => { bar.style.width = width; }, 100);
+            });
+        }, 300);
+    </script>
+
+</body>
+</html>
