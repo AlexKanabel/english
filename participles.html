@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Participles — English NMT Prep</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #FDF8F3;
+            --bg-warm: #F5F0E8;
+            --text: #2D2A26;
+            --text-light: #6B6560;
+            --accent: #3D405B;
+            --accent-hover: #2F3247;
+            --green: #81B29A;
+            --green-bg: rgba(129,178,154,0.12);
+            --red: #C84B31;
+            --red-bg: rgba(200,75,49,0.08);
+            --card: #FFFFFF;
+            --shadow: rgba(45,42,38,0.06);
+            --shadow-hover: rgba(45,42,38,0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; height: 64px;
+            background: rgba(253,248,243,0.95); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(45,42,38,0.06);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 100;
+        }
+        .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+        .logo span { color: #E07A5F; }
+        .back-btn {
+            padding: 8px 20px; background: var(--card);
+            border: 1.5px solid rgba(45,42,38,0.1);
+            border-radius: 50px; text-decoration: none;
+            font-size: 14px; font-weight: 600; color: var(--text);
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(45,42,38,0.08); }
+
+        .main { padding-top: 100px; max-width: 800px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+        h1 { font-size: 34px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+        .breadcrumb { font-size: 14px; color: var(--text-light); margin-bottom: 40px; }
+
+        .section {
+            background: var(--card); border-radius: var(--radius);
+            padding: 28px 32px; margin-bottom: 20px;
+            box-shadow: 0 4px 24px var(--shadow);
+        }
+        .section h2 {
+            font-size: 20px; font-weight: 700; margin-bottom: 20px;
+            color: var(--accent); display: flex; align-items: center; gap: 10px;
+        }
+        .section h2 .num {
+            width: 32px; height: 32px; background: var(--accent);
+            color: white; border-radius: 50%; display: inline-flex;
+            align-items: center; justify-content: center; font-size: 14px;
+        }
+
+        .theory-block { margin-bottom: 24px; }
+        .theory-block:last-child { margin-bottom: 0; }
+        .theory-block h3 {
+            font-size: 18px; font-weight: 700; margin-bottom: 10px;
+            color: var(--text);
+        }
+        .theory-block p, .theory-block li {
+            font-size: 16px; line-height: 1.7; color: var(--text);
+            margin-bottom: 8px;
+        }
+        .theory-block ul { padding-left: 22px; margin-bottom: 12px; }
+
+        .example-box {
+            background: var(--bg-warm); border-left: 4px solid var(--accent);
+            padding: 12px 16px; border-radius: 0 10px 10px 0;
+            margin: 10px 0; font-size: 15px;
+        }
+        .example-box .en { color: var(--text); font-weight: 600; }
+        .example-box .ua { color: var(--text-light); font-size: 14px; margin-top: 4px; }
+
+        .exercise-item {
+            margin-bottom: 24px; padding-bottom: 24px;
+            border-bottom: 1px solid rgba(45,42,38,0.06);
+        }
+        .exercise-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+        .exercise-text {
+            background: var(--bg-warm); padding: 20px 22px;
+            border-radius: var(--radius-sm); margin-bottom: 20px;
+            font-size: 16px; line-height: 1.8;
+        }
+        .gap-input {
+            display: inline-block; width: 130px; padding: 6px 10px;
+            border: 2px solid rgba(45,42,38,0.15); border-radius: 8px;
+            font-size: 15px; text-align: center; outline: none;
+            margin: 0 4px; transition: border-color 0.2s;
+        }
+        .gap-input:focus { border-color: var(--accent); }
+        .gap-input.correct { border-color: var(--green); background: var(--green-bg); }
+        .gap-input.wrong { border-color: var(--red); background: var(--red-bg); }
+
+        .question { font-size: 16px; margin-bottom: 14px; font-weight: 600; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .opt-label {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 16px; background: var(--bg);
+            border-radius: var(--radius-sm); cursor: pointer;
+            transition: all 0.2s; border: 2px solid transparent;
+        }
+        .opt-label:hover { background: rgba(61,64,91,0.04); }
+        .opt-label input { display: none; }
+        .opt-label .radio {
+            width: 20px; height: 20px; border: 2px solid rgba(45,42,38,0.2);
+            border-radius: 50%; position: relative; flex-shrink: 0;
+        }
+        .opt-label input:checked + .radio { border-color: var(--accent); }
+        .opt-label input:checked + .radio::after {
+            content: ''; position: absolute; top: 3px; left: 3px;
+            width: 10px; height: 10px; background: var(--accent); border-radius: 50%;
+        }
+        .opt-label.correct { border-color: var(--green); background: var(--green-bg); }
+        .opt-label.wrong { border-color: var(--red); background: var(--red-bg); }
+        .opt-label.disabled { pointer-events: none; opacity: 0.7; }
+
+        .check-btn {
+            padding: 10px 24px; background: var(--accent); color: white;
+            border: none; border-radius: 8px; cursor: pointer;
+            font-size: 15px; font-weight: 600; transition: background 0.2s;
+            margin-top: 10px;
+        }
+        .check-btn:hover { background: var(--accent-hover); }
+        .check-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .feedback { margin-top: 10px; font-size: 15px; font-weight: 600; min-height: 22px; }
+        .feedback.correct { color: var(--green); }
+        .feedback.wrong { color: var(--red); }
+
+        .translate-input {
+            width: 100%; padding: 10px 14px; border: 2px solid rgba(45,42,38,0.15);
+            border-radius: 8px; font-size: 15px; outline: none; margin-top: 8px;
+        }
+        .translate-input:focus { border-color: var(--accent); }
+        .translate-input.correct { border-color: var(--green); background: var(--green-bg); }
+        .translate-input.wrong { border-color: var(--red); background: var(--red-bg); }
+
+        .sticky-result {
+            position: fixed; bottom: 20px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card); padding: 16px 32px;
+            border-radius: 50px; box-shadow: 0 12px 40px rgba(45,42,38,0.18);
+            font-size: 16px; font-weight: 700; z-index: 50;
+            display: flex; align-items: center; gap: 12px;
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+            border: 2px solid var(--accent);
+        }
+        .sticky-result.visible { transform: translateX(-50%) translateY(0); }
+        .sticky-result .score { color: var(--accent); font-size: 22px; }
+
+        .final-summary {
+            background: linear-gradient(135deg, var(--accent), #5E60A3);
+            color: white; padding: 28px 32px; border-radius: var(--radius);
+            margin-top: 32px; display: none;
+        }
+        .final-summary.active { display: block; animation: fadeIn 0.5s ease; }
+        .final-summary h3 { font-size: 22px; margin-bottom: 12px; }
+        .final-summary p { font-size: 16px; opacity: 0.95; }
+        .summary-details {
+            margin-top: 16px; display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;
+        }
+        .summary-box {
+            background: rgba(255,255,255,0.2); padding: 14px;
+            border-radius: var(--radius-sm); text-align: center;
+        }
+        .summary-box .label { font-size: 13px; opacity: 0.9; }
+        .summary-box .value { font-size: 24px; font-weight: 800; margin-top: 4px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 640px) {
+            .header { padding: 0 20px; }
+            h1 { font-size: 26px; }
+            .section { padding: 22px 20px; }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">English<span>NMT</span></div>
+        <a href="../index.html" class="back-btn">← На головну</a>
+    </header>
+
+    <main class="main">
+        <h1>Participles</h1>
+        <div class="breadcrumb">Граматика → VERB → Participles</div>
+
+        <!-- THEORY: Explanation -->
+        <div class="section">
+            <h2><span class="num">1</span>Пояснення теми</h2>
+            <p><strong>Participle (причастя / дієприкметник)</strong> — це нелична форма дієслова, яка поєднує властивості дієслова, прикметника та прислівника. У сучасній англійській мові розрізняють два основні типи: <strong>Present Participle (Participle I)</strong> з закінченням <em>-ing</em> та <strong>Past Participle (Participle II)</strong> у формі третьої колонки неправильних дієслів або з закінченням <em>-ed</em>.</p>
+            <p>Причастя широко використовуються для утворення складних часів (Perfect, Continuous, Passive), а також як самостійні конструкції — <strong>Participle Clauses</strong> (причетні обороти), які замінюють підрядні речення часу, причини, умови та означення. Вони роблять мову більш лаконічною та літературною, тому часто зустрічаються в текстах для читання на НМТ.</p>
+        </div>
+
+        <!-- THEORY: Rules -->
+        <div class="section">
+            <h2><span class="num">2</span>Правила та приклади використання</h2>
+
+            <div class="theory-block">
+                <h3>2.1 Present Participle (V-ing)</h3>
+                <p><strong>Утворення:</strong> основа дієслова + <strong>-ing</strong></p>
+                <p><strong>Значення:</strong> активна дія, що відбувається одночасно з дією присудка або описує активну ознаку.</p>
+                <div class="example-box">
+                    <div class="en"><u>Walking</u> in the park, I met an old friend. (= While I was walking...)</div>
+                    <div class="ua">Гуляючи в парку, я зустрів старого друга.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">The girl <u>sitting</u> by the window is my sister.</div>
+                    <div class="ua">Дівчина, що сидить біля вікна, — моя сестра.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en"><u>Not knowing</u> the answer, I kept silent.</div>
+                    <div class="ua">Не знаючи відповіді, я мовчав.</div>
+                </div>
+            </div>
+
+            <div class="theory-block">
+                <h3>2.2 Past Participle (V3 / -ed)</h3>
+                <p><strong>Утворення:</strong> 3-тя форма неправильного дієслова або основа + <strong>-ed</strong></p>
+                <p><strong>Значення:</strong> пасивна дія або стан, що передує дії присудка або є її результатом.</p>
+                <div class="example-box">
+                    <div class="en">The window <u>broken</u> yesterday has been repaired.</div>
+                    <div class="ua">Вікно, розбите вчора, вже відремонтували.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en"><u>Shocked</u> by the news, she burst into tears.</div>
+                    <div class="ua">Шокована новиною, вона розплакалася.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">Most people <u>invited</u> to the party were my friends.</div>
+                    <div class="ua">Більшість людей, запрошених на вечірку, були моїми друзями.</div>
+                </div>
+            </div>
+
+            <div class="theory-block">
+                <h3>2.3 Perfect Participle (Having + V3)</h3>
+                <p><strong>Утворення:</strong> <strong>Having</strong> + Past Participle</p>
+                <p><strong>Значення:</strong> дія, що передує дії присудка (завершена раніше).</p>
+                <div class="example-box">
+                    <div class="en"><u>Having finished</u> his work, he went home. (= After he had finished...)</div>
+                    <div class="ua">Закінчивши роботу, він пішов додому.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en"><u>Having been warned</u> about the danger, they turned back.</div>
+                    <div class="ua">Бувши попередженими про небезпеку, вони повернули назад.</div>
+                </div>
+            </div>
+
+            <div class="theory-block">
+                <h3>2.4 Participle Clauses — функції в реченні</h3>
+                <p><strong>Означення (Attribute):</strong> стоять перед або після іменника, замінюють означувальні підрядні речення.</p>
+                <div class="example-box">
+                    <div class="en">A <u>sleeping</u> child. A story <u>told</u> by my grandmother.</div>
+                    <div class="ua">Дитина, що спить. Історія, розказана моєю бабусею.</div>
+                </div>
+                <p><strong>Обставина (Adverbial):</strong> замінюють підрядні речення часу, причини, умови.</p>
+                <div class="example-box">
+                    <div class="en"><u>Turning</u> to the left, you will see the bank. (умова)</div>
+                    <div class="ua">Повернувши ліворуч, ви побачите банк.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en"><u>Being</u> very tired, we went to bed early. (причина)</div>
+                    <div class="ua">Будучи дуже втомленими, ми рано лягли спати.</div>
+                </div>
+                <p><strong>Частина складеного присудка:</strong></p>
+                <div class="example-box">
+                    <div class="en">I saw him <u>crossing</u> the street. (Object + Participle)</div>
+                    <div class="ua">Я бачив, як він переходив вулицю.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THEORY: Peculiarities -->
+        <div class="section">
+            <h2><span class="num">3</span>Особливості та типові помилки</h2>
+            <ul>
+                <li><strong>Логічний підмет:</strong> у причетному обороті підметом є іменник/займенник головного речення. Якщо логічний зв'язок порушено, виникає <em>dangling participle</em> (відірване причастя). <em><u>Walking</u> in the park, the flowers were beautiful ❌ → <u>Walking</u> in the park, I saw beautiful flowers ✅</em></li>
+                <li><strong>Being + V3:</strong> це пасивне причастя теперішнього часу (дія відбувається зараз). <em><u>Being</u> repaired at the moment, the car is not available.</em></li>
+                <li><strong>Having been + V3:</strong> пасивне perfect participle (дія завершилася раніше). <em><u>Having been invited</u> to the conference, he prepared a speech.</em></li>
+                <li><strong>Not + Participle:</strong> заперечення утворюється додаванням <em>not</em> на початку обороту. <em><u>Not knowing</u> the truth, she agreed.</em></li>
+                <li><strong>Participle I vs. Gerund:</strong> обидві форми закінчуються на <em>-ing</em>, але participle має прикметникове/прислівникове значення (a <u>sleeping</u> child — причастя), тоді як gerund — іменникове (<u>Swimming</u> is fun — герундій).</li>
+                <li><strong>After / On / When + Participle:</strong> прийменники можуть вживатися з причастям для уточнення: <em><u>On hearing</u> the news, she smiled. <u>After finishing</u> his meal, he left.</em></li>
+            </ul>
+        </div>
+
+        <!-- EXERCISE 1: Text gaps -->
+        <div class="section">
+            <h2><span class="num">4</span>Вправа: текст із пропусками</h2>
+            <div class="exercise-text">
+                <input type="text" class="gap-input" id="e1_1" placeholder="1"> (walk) in the park, I met an old friend. The window <input type="text" class="gap-input" id="e1_2" placeholder="2"> (break) yesterday has been repaired. <input type="text" class="gap-input" id="e1_3" placeholder="3"> (finish) his work, he went home. <input type="text" class="gap-input" id="e1_4" placeholder="4"> (ask) about it, she smiled. <input type="text" class="gap-input" id="e1_5" placeholder="5"> (not know) the answer, I kept silent.
+            </div>
+            <button class="check-btn" onclick="checkEx1()">Перевірити</button>
+            <div class="feedback" id="f1"></div>
+        </div>
+
+        <!-- EXERCISE 2: Multiple choice -->
+        <div class="section">
+            <h2><span class="num">5</span>Вправа: оберіть правильну форму</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. ______ in the park, I met an old friend.</div>
+                <div class="options" id="e2_1_opts">
+                    <label class="opt-label"><input type="radio" name="e2_1" value="a"><span class="radio"></span>Walk</label>
+                    <label class="opt-label"><input type="radio" name="e2_1" value="b"><span class="radio"></span>Walking</label>
+                    <label class="opt-label"><input type="radio" name="e2_1" value="c"><span class="radio"></span>Walked</label>
+                    <label class="opt-label"><input type="radio" name="e2_1" value="d"><span class="radio"></span>Having walked</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. The letter ______ yesterday was important.</div>
+                <div class="options" id="e2_2_opts">
+                    <label class="opt-label"><input type="radio" name="e2_2" value="a"><span class="radio"></span>writing</label>
+                    <label class="opt-label"><input type="radio" name="e2_2" value="b"><span class="radio"></span>written</label>
+                    <label class="opt-label"><input type="radio" name="e2_2" value="c"><span class="radio"></span>wrote</label>
+                    <label class="opt-label"><input type="radio" name="e2_2" value="d"><span class="radio"></span>having written</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. ______ his homework, he went out.</div>
+                <div class="options" id="e2_3_opts">
+                    <label class="opt-label"><input type="radio" name="e2_3" value="a"><span class="radio"></span>Finishing</label>
+                    <label class="opt-label"><input type="radio" name="e2_3" value="b"><span class="radio"></span>Having finished</label>
+                    <label class="opt-label"><input type="radio" name="e2_3" value="c"><span class="radio"></span>Finished</label>
+                    <label class="opt-label"><input type="radio" name="e2_3" value="d"><span class="radio"></span>Having been finished</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. The man ______ by the police was innocent.</div>
+                <div class="options" id="e2_4_opts">
+                    <label class="opt-label"><input type="radio" name="e2_4" value="a"><span class="radio"></span>arresting</label>
+                    <label class="opt-label"><input type="radio" name="e2_4" value="b"><span class="radio"></span>having arrested</label>
+                    <label class="opt-label"><input type="radio" name="e2_4" value="c"><span class="radio"></span>arrested</label>
+                    <label class="opt-label"><input type="radio" name="e2_4" value="d"><span class="radio"></span>being arrested</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. ______ by the news, she burst into tears.</div>
+                <div class="options" id="e2_5_opts">
+                    <label class="opt-label"><input type="radio" name="e2_5" value="a"><span class="radio"></span>Shocking</label>
+                    <label class="opt-label"><input type="radio" name="e2_5" value="b"><span class="radio"></span>Shocked</label>
+                    <label class="opt-label"><input type="radio" name="e2_5" value="c"><span class="radio"></span>Having shocked</label>
+                    <label class="opt-label"><input type="radio" name="e2_5" value="d"><span class="radio"></span>Being shocked</label>
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx2()">Перевірити</button>
+            <div class="feedback" id="f2"></div>
+        </div>
+
+        <!-- EXERCISE 3: Multiple choice context -->
+        <div class="section">
+            <h2><span class="num">6</span>Вправа: оберіть правильну відповідь</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. ______ time, we decided to take a taxi.</div>
+                <div class="options" id="e3_1_opts">
+                    <label class="opt-label"><input type="radio" name="e3_1" value="a"><span class="radio"></span>Running out of</label>
+                    <label class="opt-label"><input type="radio" name="e3_1" value="b"><span class="radio"></span>Run out of</label>
+                    <label class="opt-label"><input type="radio" name="e3_1" value="c"><span class="radio"></span>Having run out of</label>
+                    <label class="opt-label"><input type="radio" name="e3_1" value="d"><span class="radio"></span>Ran out of</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. The book ______ on the table is mine.</div>
+                <div class="options" id="e3_2_opts">
+                    <label class="opt-label"><input type="radio" name="e3_2" value="a"><span class="radio"></span>lie</label>
+                    <label class="opt-label"><input type="radio" name="e3_2" value="b"><span class="radio"></span>laying</label>
+                    <label class="opt-label"><input type="radio" name="e3_2" value="c"><span class="radio"></span>lying</label>
+                    <label class="opt-label"><input type="radio" name="e3_2" value="d"><span class="radio"></span>lain</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. ______ in a car accident, he couldn't walk.</div>
+                <div class="options" id="e3_3_opts">
+                    <label class="opt-label"><input type="radio" name="e3_3" value="a"><span class="radio"></span>Injuring</label>
+                    <label class="opt-label"><input type="radio" name="e3_3" value="b"><span class="radio"></span>Injured</label>
+                    <label class="opt-label"><input type="radio" name="e3_3" value="c"><span class="radio"></span>Having injured</label>
+                    <label class="opt-label"><input type="radio" name="e3_3" value="d"><span class="radio"></span>Being injured</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. ______ the truth, she apologised.</div>
+                <div class="options" id="e3_4_opts">
+                    <label class="opt-label"><input type="radio" name="e3_4" value="a"><span class="radio"></span>Learning</label>
+                    <label class="opt-label"><input type="radio" name="e3_4" value="b"><span class="radio"></span>Having learned</label>
+                    <label class="opt-label"><input type="radio" name="e3_4" value="c"><span class="radio"></span>Learned</label>
+                    <label class="opt-label"><input type="radio" name="e3_4" value="d"><span class="radio"></span>Having been learned</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. Most people ______ at the party were my friends.</div>
+                <div class="options" id="e3_5_opts">
+                    <label class="opt-label"><input type="radio" name="e3_5" value="a"><span class="radio"></span>inviting</label>
+                    <label class="opt-label"><input type="radio" name="e3_5" value="b"><span class="radio"></span>having invited</label>
+                    <label class="opt-label"><input type="radio" name="e3_5" value="c"><span class="radio"></span>invited</label>
+                    <label class="opt-label"><input type="radio" name="e3_5" value="d"><span class="radio"></span>being invited</label>
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx3()">Перевірити</button>
+            <div class="feedback" id="f3"></div>
+        </div>
+
+        <!-- EXERCISE 4: Translation -->
+        <div class="section">
+            <h2><span class="num">7</span>Вправа: перекладіть речення</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. Читаючи книгу, я заснув.</div>
+                <input type="text" class="translate-input" id="e4_1" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. Вікно, розбите вчора, вже відремонтували.</div>
+                <input type="text" class="translate-input" id="e4_2" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. Закінчивши роботу, він пішов додому.</div>
+                <input type="text" class="translate-input" id="e4_3" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. Запитаний про це, він промовчав.</div>
+                <input type="text" class="translate-input" id="e4_4" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. Дівчина, що сидить біля вікна, — моя сестра.</div>
+                <input type="text" class="translate-input" id="e4_5" placeholder="Ваша відповідь">
+            </div>
+            <button class="check-btn" onclick="checkEx4()">Перевірити</button>
+            <div class="feedback" id="f4"></div>
+        </div>
+
+        <!-- EXERCISE 5: Error correction / Context -->
+        <div class="section">
+            <h2><span class="num">8</span>Вправа: виправте помилки або оберіть правильний варіант</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. ______ by the dog, the boy was frightened.</div>
+                <div class="options" id="e5_1_opts">
+                    <label class="opt-label"><input type="radio" name="e5_1" value="a"><span class="radio"></span>Biting</label>
+                    <label class="opt-label"><input type="radio" name="e5_1" value="b"><span class="radio"></span>Bitten</label>
+                    <label class="opt-label"><input type="radio" name="e5_1" value="c"><span class="radio"></span>Having bitten</label>
+                    <label class="opt-label"><input type="radio" name="e5_1" value="d"><span class="radio"></span>Being bitten</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. ______ in the sun, the fruit dried quickly.</div>
+                <div class="options" id="e5_2_opts">
+                    <label class="opt-label"><input type="radio" name="e5_2" value="a"><span class="radio"></span>Laying</label>
+                    <label class="opt-label"><input type="radio" name="e5_2" value="b"><span class="radio"></span>Lying</label>
+                    <label class="opt-label"><input type="radio" name="e5_2" value="c"><span class="radio"></span>Laid</label>
+                    <label class="opt-label"><input type="radio" name="e5_2" value="d"><span class="radio"></span>Lain</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. Not ______ what to do, she called her mother.</div>
+                <div class="options" id="e5_3_opts">
+                    <label class="opt-label"><input type="radio" name="e5_3" value="a"><span class="radio"></span>know</label>
+                    <label class="opt-label"><input type="radio" name="e5_3" value="b"><span class="radio"></span>known</label>
+                    <label class="opt-label"><input type="radio" name="e5_3" value="c"><span class="radio"></span>knowing</label>
+                    <label class="opt-label"><input type="radio" name="e5_3" value="d"><span class="radio"></span>having known</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. The house ______ last year is beautiful.</div>
+                <div class="options" id="e5_4_opts">
+                    <label class="opt-label"><input type="radio" name="e5_4" value="a"><span class="radio"></span>building</label>
+                    <label class="opt-label"><input type="radio" name="e5_4" value="b"><span class="radio"></span>built</label>
+                    <label class="opt-label"><input type="radio" name="e5_4" value="c"><span class="radio"></span>having built</label>
+                    <label class="opt-label"><input type="radio" name="e5_4" value="d"><span class="radio"></span>being built</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. ______ from the hill, the city looks amazing.</div>
+                <div class="options" id="e5_5_opts">
+                    <label class="opt-label"><input type="radio" name="e5_5" value="a"><span class="radio"></span>Seeing</label>
+                    <label class="opt-label"><input type="radio" name="e5_5" value="b"><span class="radio"></span>Seen</label>
+                    <label class="opt-label"><input type="radio" name="e5_5" value="c"><span class="radio"></span>Having seen</label>
+                    <label class="opt-label"><input type="radio" name="e5_5" value="d"><span class="radio"></span>Being seen</label>
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx5()">Перевірити</button>
+            <div class="feedback" id="f5"></div>
+        </div>
+
+        <!-- FINAL SUMMARY -->
+        <div class="final-summary" id="finalSummary">
+            <h3>🎉 Вітаємо! Ви завершили тему</h3>
+            <p>Ось ваш підсумковий результат:</p>
+            <div class="summary-details">
+                <div class="summary-box"><div class="label">Всього балів</div><div class="value" id="totalScore">0/25</div></div>
+                <div class="summary-box"><div class="label">Текст із пропусками</div><div class="value" id="scoreEx1">0/5</div></div>
+                <div class="summary-box"><div class="label">Вибір форми</div><div class="value" id="scoreEx2">0/5</div></div>
+                <div class="summary-box"><div class="label">Контекст</div><div class="value" id="scoreEx3">0/5</div></div>
+                <div class="summary-box"><div class="label">Переклад</div><div class="value" id="scoreEx4">0/5</div></div>
+                <div class="summary-box"><div class="label">Виправлення</div><div class="value" id="scoreEx5">0/5</div></div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="sticky-result" id="stickyResult">
+        <span>Набрано:</span>
+        <span class="score" id="stickyScore">0/25</span>
+    </div>
+
+    <script>
+        let scores = { ex1: 0, ex2: 0, ex3: 0, ex4: 0, ex5: 0 };
+        let checked = { ex1: false, ex2: false, ex3: false, ex4: false, ex5: false };
+
+        function updateSticky() {
+            const total = scores.ex1 + scores.ex2 + scores.ex3 + scores.ex4 + scores.ex5;
+            document.getElementById('stickyScore').textContent = total + '/25';
+            document.getElementById('stickyResult').classList.add('visible');
+
+            if (Object.values(checked).every(v => v)) {
+                document.getElementById('totalScore').textContent = total + '/25';
+                document.getElementById('scoreEx1').textContent = scores.ex1 + '/5';
+                document.getElementById('scoreEx2').textContent = scores.ex2 + '/5';
+                document.getElementById('scoreEx3').textContent = scores.ex3 + '/5';
+                document.getElementById('scoreEx4').textContent = scores.ex4 + '/5';
+                document.getElementById('scoreEx5').textContent = scores.ex5 + '/5';
+                document.getElementById('finalSummary').classList.add('active');
+                document.getElementById('stickyResult').style.display = 'none';
+            }
+        }
+
+        function checkEx1() {
+            const answers = ['walking', 'broken', 'having finished', 'asked', 'not knowing'];
+            let correct = 0;
+            answers.forEach((ans, i) => {
+                const input = document.getElementById('e1_' + (i+1));
+                const val = input.value.trim().toLowerCase();
+                if (val === ans) {
+                    input.classList.add('correct'); input.classList.remove('wrong');
+                    correct++;
+                } else {
+                    input.classList.add('wrong'); input.classList.remove('correct');
+                }
+            });
+            scores.ex1 = correct; checked.ex1 = true;
+            const fb = document.getElementById('f1');
+            fb.textContent = correct === 5 ? '✅ Відмінно! 5/5' : `❌ Результат: ${correct}/5. Перевірте помилки.`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : 'wrong');
+            updateSticky();
+        }
+
+        function checkEx2() {
+            const answers = { e2_1: 'b', e2_2: 'b', e2_3: 'b', e2_4: 'c', e2_5: 'b' };
+            let correct = 0;
+            for (let key in answers) {
+                const opts = document.getElementById(key + '_opts');
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                opts.querySelectorAll('.opt-label').forEach(label => {
+                    label.classList.add('disabled');
+                    const inp = label.querySelector('input');
+                    if (inp.value === answers[key]) label.classList.add('correct');
+                    else if (selected && inp === selected) label.classList.add('wrong');
+                });
+                if (selected && selected.value === answers[key]) correct++;
+            }
+            scores.ex2 = correct; checked.ex2 = true;
+            const fb = document.getElementById('f2');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx3() {
+            const answers = { e3_1: 'a', e3_2: 'c', e3_3: 'b', e3_4: 'b', e3_5: 'c' };
+            let correct = 0;
+            for (let key in answers) {
+                const opts = document.getElementById(key + '_opts');
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                opts.querySelectorAll('.opt-label').forEach(label => {
+                    label.classList.add('disabled');
+                    const inp = label.querySelector('input');
+                    if (inp.value === answers[key]) label.classList.add('correct');
+                    else if (selected && inp === selected) label.classList.add('wrong');
+                });
+                if (selected && selected.value === answers[key]) correct++;
+            }
+            scores.ex3 = correct; checked.ex3 = true;
+            const fb = document.getElementById('f3');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx4() {
+            const answers = [
+                ['reading a book i fell asleep'],
+                ['the window broken yesterday has already been repaired', 'the window broken yesterday has been repaired'],
+                ['having finished his work he went home'],
+                ['asked about it he kept silent', 'when asked about it he kept silent'],
+                ['the girl sitting by the window is my sister']
+            ];
+            let correct = 0;
+            answers.forEach((ansList, i) => {
+                const input = document.getElementById('e4_' + (i+1));
+                const val = input.value.trim().toLowerCase().replace(/[.,!?:;]/g, '');
+                const isCorrect = ansList.some(a => val === a.toLowerCase().replace(/[.,!?:;]/g, ''));
+                if (isCorrect) { input.classList.add('correct'); input.classList.remove('wrong'); correct++; }
+                else { input.classList.add('wrong'); input.classList.remove('correct'); }
+            });
+            scores.ex4 = correct; checked.ex4 = true;
+            const fb = document.getElementById('f4');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx5() {
+            const answers = { e5_1: 'b', e5_2: 'b', e5_3: 'c', e5_4: 'b', e5_5: 'b' };
+            let correct = 0;
+            for (let key in answers) {
+                const opts = document.getElementById(key + '_opts');
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                opts.querySelectorAll('.opt-label').forEach(label => {
+                    label.classList.add('disabled');
+                    const inp = label.querySelector('input');
+                    if (inp.value === answers[key]) label.classList.add('correct');
+                    else if (selected && inp === selected) label.classList.add('wrong');
+                });
+                if (selected && selected.value === answers[key]) correct++;
+            }
+            scores.ex5 = correct; checked.ex5 = true;
+            const fb = document.getElementById('f5');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+    </script>
+</body>
+</html>

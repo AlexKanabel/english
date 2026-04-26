@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noun — English NMT Prep</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #FDF8F3;
+            --bg-warm: #F5F0E8;
+            --text: #2D2A26;
+            --text-light: #6B6560;
+            --accent: #3D405B;
+            --accent-hover: #2F3247;
+            --green: #81B29A;
+            --green-bg: rgba(129,178,154,0.12);
+            --red: #C84B31;
+            --red-bg: rgba(200,75,49,0.08);
+            --card: #FFFFFF;
+            --shadow: rgba(45,42,38,0.06);
+            --shadow-hover: rgba(45,42,38,0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; height: 64px;
+            background: rgba(253,248,243,0.95); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(45,42,38,0.06);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 100;
+        }
+        .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+        .logo span { color: #E07A5F; }
+        .back-btn {
+            padding: 8px 20px; background: var(--card);
+            border: 1.5px solid rgba(45,42,38,0.1);
+            border-radius: 50px; text-decoration: none;
+            font-size: 14px; font-weight: 600; color: var(--text);
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(45,42,38,0.08); }
+
+        .main { padding-top: 100px; max-width: 800px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+        h1 { font-size: 34px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+        .breadcrumb { font-size: 14px; color: var(--text-light); margin-bottom: 40px; }
+
+        .section {
+            background: var(--card); border-radius: var(--radius);
+            padding: 28px 32px; margin-bottom: 20px;
+            box-shadow: 0 4px 24px var(--shadow);
+        }
+        .section h2 {
+            font-size: 20px; font-weight: 700; margin-bottom: 20px;
+            color: var(--accent); display: flex; align-items: center; gap: 10px;
+        }
+        .section h2 .num {
+            width: 32px; height: 32px; background: var(--accent);
+            color: white; border-radius: 50%; display: inline-flex;
+            align-items: center; justify-content: center; font-size: 14px;
+        }
+
+        .theory-block { margin-bottom: 24px; }
+        .theory-block:last-child { margin-bottom: 0; }
+        .theory-block h3 {
+            font-size: 18px; font-weight: 700; margin-bottom: 10px;
+            color: var(--text);
+        }
+        .theory-block p, .theory-block li {
+            font-size: 16px; line-height: 1.7; color: var(--text);
+            margin-bottom: 8px;
+        }
+        .theory-block ul { padding-left: 22px; margin-bottom: 12px; }
+
+        .example-box {
+            background: var(--bg-warm); border-left: 4px solid var(--accent);
+            padding: 12px 16px; border-radius: 0 10px 10px 0;
+            margin: 10px 0; font-size: 15px;
+        }
+        .example-box .en { color: var(--text); font-weight: 600; }
+        .example-box .ua { color: var(--text-light); font-size: 14px; margin-top: 4px; }
+
+        .exercise-item {
+            margin-bottom: 24px; padding-bottom: 24px;
+            border-bottom: 1px solid rgba(45,42,38,0.06);
+        }
+        .exercise-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+        .exercise-text {
+            background: var(--bg-warm); padding: 20px 22px;
+            border-radius: var(--radius-sm); margin-bottom: 20px;
+            font-size: 16px; line-height: 1.8;
+        }
+        .gap-input {
+            display: inline-block; width: 140px; padding: 6px 10px;
+            border: 2px solid rgba(45,42,38,0.15); border-radius: 8px;
+            font-size: 15px; text-align: center; outline: none;
+            margin: 0 4px; transition: border-color 0.2s;
+        }
+        .gap-input:focus { border-color: var(--accent); }
+        .gap-input.correct { border-color: var(--green); background: var(--green-bg); }
+        .gap-input.wrong { border-color: var(--red); background: var(--red-bg); }
+
+        .question { font-size: 16px; margin-bottom: 14px; font-weight: 600; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .opt-label {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 16px; background: var(--bg);
+            border-radius: var(--radius-sm); cursor: pointer;
+            transition: all 0.2s; border: 2px solid transparent;
+        }
+        .opt-label:hover { background: rgba(61,64,91,0.04); }
+        .opt-label input { display: none; }
+        .opt-label .radio {
+            width: 20px; height: 20px; border: 2px solid rgba(45,42,38,0.2);
+            border-radius: 50%; position: relative; flex-shrink: 0;
+        }
+        .opt-label input:checked + .radio { border-color: var(--accent); }
+        .opt-label input:checked + .radio::after {
+            content: ''; position: absolute; top: 3px; left: 3px;
+            width: 10px; height: 10px; background: var(--accent); border-radius: 50%;
+        }
+        .opt-label.correct { border-color: var(--green); background: var(--green-bg); }
+        .opt-label.wrong { border-color: var(--red); background: var(--red-bg); }
+        .opt-label.disabled { pointer-events: none; opacity: 0.7; }
+
+        .check-btn {
+            padding: 10px 24px; background: var(--accent); color: white;
+            border: none; border-radius: 8px; cursor: pointer;
+            font-size: 15px; font-weight: 600; transition: background 0.2s;
+            margin-top: 10px;
+        }
+        .check-btn:hover { background: var(--accent-hover); }
+        .check-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .feedback { margin-top: 10px; font-size: 15px; font-weight: 600; min-height: 22px; }
+        .feedback.correct { color: var(--green); }
+        .feedback.wrong { color: var(--red); }
+
+        .translate-input {
+            width: 100%; padding: 10px 14px; border: 2px solid rgba(45,42,38,0.15);
+            border-radius: 8px; font-size: 15px; outline: none; margin-top: 8px;
+        }
+        .translate-input:focus { border-color: var(--accent); }
+        .translate-input.correct { border-color: var(--green); background: var(--green-bg); }
+        .translate-input.wrong { border-color: var(--red); background: var(--red-bg); }
+
+        .sticky-result {
+            position: fixed; bottom: 20px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card); padding: 16px 32px;
+            border-radius: 50px; box-shadow: 0 12px 40px rgba(45,42,38,0.18);
+            font-size: 16px; font-weight: 700; z-index: 50;
+            display: flex; align-items: center; gap: 12px;
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+            border: 2px solid var(--accent);
+        }
+        .sticky-result.visible { transform: translateX(-50%) translateY(0); }
+        .sticky-result .score { color: var(--accent); font-size: 22px; }
+
+        .final-summary {
+            background: linear-gradient(135deg, var(--accent), #5E60A3);
+            color: white; padding: 28px 32px; border-radius: var(--radius);
+            margin-top: 32px; display: none;
+        }
+        .final-summary.active { display: block; animation: fadeIn 0.5s ease; }
+        .final-summary h3 { font-size: 22px; margin-bottom: 12px; }
+        .final-summary p { font-size: 16px; opacity: 0.95; }
+        .summary-details {
+            margin-top: 16px; display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;
+        }
+        .summary-box {
+            background: rgba(255,255,255,0.2); padding: 14px;
+            border-radius: var(--radius-sm); text-align: center;
+        }
+        .summary-box .label { font-size: 13px; opacity: 0.9; }
+        .summary-box .value { font-size: 24px; font-weight: 800; margin-top: 4px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 640px) {
+            .header { padding: 0 20px; }
+            h1 { font-size: 26px; }
+            .section { padding: 22px 20px; }
+        }
+    </style>
+    <base target="_blank">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">English<span>NMT</span></div>
+        <a href="../index.html" class="back-btn">← На головну</a>
+    </header>
+
+    <main class="main">
+        <h1>Noun</h1>
+        <div class="breadcrumb">Граматика → NOUN → Noun</div>
+
+        <!-- THEORY: Explanation -->
+        <div class="section">
+            <h2><span class="num">1</span>Пояснення теми</h2>
+            <p><strong>Noun</strong> (іменник) — це частина мови, яка позначає <em>предмет, особу, поняття, явище, місце, тварину, рослину, речовину, дію або стан</em>. Іменники є центральною частиною англійської мови, оскільки вони виконують функції підмета, додатка, частини присудка та означення.</p>
+            <p>У НМТ іменники перевіряються в завданнях Use of English (вибір правильної форми, множина, артиклі), Reading (розуміння контексту) та Writing (правильне вживання колокацій). Розуміння типів іменників — ключ до правильного вживання артиклів та кількісних слів.</p>
+        </div>
+
+        <!-- THEORY: Rules -->
+        <div class="section">
+            <h2><span class="num">2</span>Правила та приклади використання</h2>
+
+            <div class="theory-block">
+                <h3>2.1 Proper vs Common Nouns (Власні та загальні іменники)</h3>
+                <p><strong>Proper nouns</strong> — власні іменники (імена людей, назви міст, країн, компаній, свят). Завжди пишуться з великої літери.</p>
+                <p><strong>Common nouns</strong> — загальні іменники (будь-які інші назви). Пишуться з малої літери, якщо не на початку речення.</p>
+                <div class="example-box">
+                    <div class="en"><u>Ukraine</u> is a beautiful country. (Proper)</div>
+                    <div class="ua">Україна — прекрасна країна.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">I bought a new <u>table</u> for the kitchen. (Common)</div>
+                    <div class="ua">Я купив новий стіл для кухні.</div>
+                </div>
+            </div>
+
+            <div class="theory-block">
+                <h3>2.2 Concrete vs Abstract Nouns (Загальні та абстрактні)</h3>
+                <p><strong>Concrete nouns</strong> — матеріальні, можна торкнутися (book, water, dog).</p>
+                <p><strong>Abstract nouns</strong> — нематеріальні, позначають поняття (love, happiness, freedom, knowledge).</p>
+                <p><strong>Важливо:</strong> Багато абстрактних іменників є <em>uncountable</em> (не countable): advice, information, progress, research.</p>
+                <div class="example-box">
+                    <div class="en"><u>Knowledge</u> is power. (Abstract, uncountable)</div>
+                    <div class="ua">Знання — це сила.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">She has a lot of <u>experience</u> in this field. (Abstract, uncountable)</div>
+                    <div class="ua">Вона має великий досвід у цій галузі.</div>
+                </div>
+            </div>
+
+            <div class="theory-block">
+                <h3>2.3 Collective Nouns (Збірні іменники)</h3>
+                <p>Позначають групу осіб або предметів як єдине ціле. В американській англійські зазвичай вживаються з дієсловом в однині, в британській — можуть бути з дієсловом у множині, якщо акцент на членах групи.</p>
+                <div class="example-box">
+                    <div class="en">The <u>team</u> <u>is</u> playing well today. (AmE — як єдине ціле)</div>
+                    <div class="ua">Команда сьогодні грає добре.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">The <u>team</u> <u>are</u> arguing about the strategy. (BrE — акцент на гравцях)</div>
+                    <div class="ua">Гравці команди сперечаються про стратегію.</div>
+                </div>
+                <p>Інші збірні іменники: family, government, audience, committee, staff, crew, public, police (завжди множина).</p>
+            </div>
+
+            <div class="theory-block">
+                <h3>2.4 Compound Nouns (Складні іменники)</h3>
+                <p>Утворюються з двох або більше слів. Можуть писатися разом, через дефіс або окремо.</p>
+                <ul>
+                    <li><strong>Разом:</strong> toothbrush, bedroom, sunglasses, bookshelf, toothbrush</li>
+                    <li><strong>Через дефіс:</strong> mother-in-law, editor-in-chief, passer-by, ten-year-old</li>
+                    <li><strong>Окремо:</strong> bus stop, post office, credit card, swimming pool</li>
+                </ul>
+                <p><strong>Множина:</strong> зазвичай змінюється останній елемент (passers-by, mothers-in-law, editors-in-chief).</p>
+                <div class="example-box">
+                    <div class="en">My <u>mother-in-law</u> is visiting us tomorrow. (Singular)</div>
+                    <div class="ua">Моя теща завтра до нас завітає.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">There were three <u>passers-by</u> at the scene. (Plural)</div>
+                    <div class="ua">На місці події було троє перехожих.</div>
+                </div>
+            </div>
+
+            <div class="theory-block">
+                <h3>2.5 Nominalization (Іменникування)</h3>
+                <p>Перетворення дієслів чи прикметників на іменники. Часто вживається в офіційному та академічному стилі.</p>
+                <div class="example-box">
+                    <div class="en"><u>Decide</u> → <u>decision</u>; <u>happy</u> → <u>happiness</u>; <u>fail</u> → <u>failure</u></div>
+                    <div class="ua">Рішення; щастя; невдача</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">The <u>arrival</u> of the train was delayed. (arrive → arrival)</div>
+                    <div class="ua">Прибуття потяга було відкладено.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THEORY: Peculiarities -->
+        <div class="section">
+            <h2><span class="num">3</span>Особливості та типові помилки</h2>
+            <ul>
+                <li><strong>Police — завжди множина:</strong> <em>The police <u>are</u> investigating the crime. ❌ The police <u>is</u>...</em></li>
+                <li><strong>People — множина від person:</strong> <em>One person, two people. ❌ Two persons</em> (persons — лише в офіційних документах).</li>
+                <li><strong>News — не countable:</strong> <em>The news <u>is</u> good. ❌ The news <u>are</u>...</em></li>
+                <li><strong>Advice vs Advise:</strong> <em>Advice</em> (іменник, uncountable) — порада; <em>Advise</em> (дієслово) — радити.</li>
+                <li><strong>Information — не countable:</strong> Не можна сказати <em>an information ❌</em>, лише <em>a piece of information ✅</em>.</li>
+                <li><strong>Compound nouns з -man:</strong> Множина змінює обидві частини: <em>man-teacher → men-teachers</em>, але часто вживається нейтральна форма <em>teachers</em>.</li>
+                <li><strong>Множина від Latin/Greek:</strong> <em>datum → data, criterion → criteria, phenomenon → phenomena, analysis → analyses</em>. У сучасній англійській <em>data</em> часто вживається як singular.</li>
+                <li><strong>Zero plural:</strong> Деякі іменники мають однакову форму в однині та множині: <em>sheep, deer, fish, species, aircraft, series</em>.</li>
+                <li><strong>Притаманність (Possession):</strong> Іменник у формі присвійного відмінка (Saxon genitive) — лише для істот (людей, тварин): <em>John's book, the dog's tail</em>. Для неістот — of-phrase: <em>the leg of the table ✅ / the table's leg ❌</em> (хоча в сучасній мові іноді вживається).</li>
+            </ul>
+        </div>
+
+        <!-- EXERCISE 1: Text gaps -->
+        <div class="section">
+            <h2><span class="num">4</span>Вправа: текст із пропусками</h2>
+            <div class="exercise-text">
+                The <input type="text" class="gap-input" id="e1_1" placeholder="1"> (police) are looking for the missing child. She gave me some excellent <input type="text" class="gap-input" id="e1_2" placeholder="2"> (advice). My <input type="text" class="gap-input" id="e1_3" placeholder="3"> (brother-in-law) works as an engineer. The <input type="text" class="gap-input" id="e1_4" placeholder="4"> (news) was shocking. We need more <input type="text" class="gap-input" id="e1_5" placeholder="5"> (information) about this course.
+            </div>
+            <button class="check-btn" onclick="checkEx1()">Перевірити</button>
+            <div class="feedback" id="f1"></div>
+        </div>
+
+        <!-- EXERCISE 2: Multiple choice -->
+        <div class="section">
+            <h2><span class="num">5</span>Вправа: оберіть правильну форму іменника</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. The _____ has announced a new policy.</div>
+                <div class="options" id="e2_1_opts">
+                    <label class="opt-label"><input type="radio" name="e2_1" value="a"><span class="radio"></span>government</label>
+                    <label class="opt-label"><input type="radio" name="e2_1" value="b"><span class="radio"></span>governments</label>
+                    <label class="opt-label"><input type="radio" name="e2_1" value="c"><span class="radio"></span>govern</label>
+                    <label class="opt-label"><input type="radio" name="e2_1" value="d"><span class="radio"></span>governing</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. I need two _____ of bread for the sandwiches.</div>
+                <div class="options" id="e2_2_opts">
+                    <label class="opt-label"><input type="radio" name="e2_2" value="a"><span class="radio"></span>loafs</label>
+                    <label class="opt-label"><input type="radio" name="e2_2" value="b"><span class="radio"></span>loaves</label>
+                    <label class="opt-label"><input type="radio" name="e2_2" value="c"><span class="radio"></span>loaf</label>
+                    <label class="opt-label"><input type="radio" name="e2_2" value="d"><span class="radio"></span>loaveses</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. The _____ of this company are very strict.</div>
+                <div class="options" id="e2_3_opts">
+                    <label class="opt-label"><input type="radio" name="e2_3" value="a"><span class="radio"></span>criterions</label>
+                    <label class="opt-label"><input type="radio" name="e2_3" value="b"><span class="radio"></span>criterion</label>
+                    <label class="opt-label"><input type="radio" name="e2_3" value="c"><span class="radio"></span>criteria</label>
+                    <label class="opt-label"><input type="radio" name="e2_3" value="d"><span class="radio"></span>criterias</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. There were several _____ at the bus stop.</div>
+                <div class="options" id="e2_4_opts">
+                    <label class="opt-label"><input type="radio" name="e2_4" value="a"><span class="radio"></span>passer-bys</label>
+                    <label class="opt-label"><input type="radio" name="e2_4" value="b"><span class="radio"></span>passers-by</label>
+                    <label class="opt-label"><input type="radio" name="e2_4" value="c"><span class="radio"></span>passer-by</label>
+                    <label class="opt-label"><input type="radio" name="e2_4" value="d"><span class="radio"></span>passers-bys</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. Her _____ to medicine saved thousands of lives.</div>
+                <div class="options" id="e2_5_opts">
+                    <label class="opt-label"><input type="radio" name="e2_5" value="a"><span class="radio"></span>contribute</label>
+                    <label class="opt-label"><input type="radio" name="e2_5" value="b"><span class="radio"></span>contributing</label>
+                    <label class="opt-label"><input type="radio" name="e2_5" value="c"><span class="radio"></span>contribution</label>
+                    <label class="opt-label"><input type="radio" name="e2_5" value="d"><span class="radio"></span>contributive</label>
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx2()">Перевірити</button>
+            <div class="feedback" id="f2"></div>
+        </div>
+
+        <!-- EXERCISE 3: Multiple choice context -->
+        <div class="section">
+            <h2><span class="num">6</span>Вправа: оберіть правильну відповідь у контексті</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. The _____ are searching the building right now.</div>
+                <div class="options" id="e3_1_opts">
+                    <label class="opt-label"><input type="radio" name="e3_1" value="a"><span class="radio"></span>police</label>
+                    <label class="opt-label"><input type="radio" name="e3_1" value="b"><span class="radio"></span>polices</label>
+                    <label class="opt-label"><input type="radio" name="e3_1" value="c"><span class="radio"></span>policeman</label>
+                    <label class="opt-label"><input type="radio" name="e3_1" value="d"><span class="radio"></span>policemen</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. Could you give me a _____ of advice?</div>
+                <div class="options" id="e3_2_opts">
+                    <label class="opt-label"><input type="radio" name="e3_2" value="a"><span class="radio"></span>bit</label>
+                    <label class="opt-label"><input type="radio" name="e3_2" value="b"><span class="radio"></span>piece</label>
+                    <label class="opt-label"><input type="radio" name="e3_2" value="c"><span class="radio"></span>slice</label>
+                    <label class="opt-label"><input type="radio" name="e3_2" value="d"><span class="radio"></span>part</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. The _____ has voted against the proposal.</div>
+                <div class="options" id="e3_3_opts">
+                    <label class="opt-label"><input type="radio" name="e3_3" value="a"><span class="radio"></span>committee</label>
+                    <label class="opt-label"><input type="radio" name="e3_3" value="b"><span class="radio"></span>committees</label>
+                    <label class="opt-label"><input type="radio" name="e3_3" value="c"><span class="radio"></span>committeemen</label>
+                    <label class="opt-label"><input type="radio" name="e3_3" value="d"><span class="radio"></span>members of committee</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. I saw three _____ in the field this morning.</div>
+                <div class="options" id="e3_4_opts">
+                    <label class="opt-label"><input type="radio" name="e3_4" value="a"><span class="radio"></span>sheeps</label>
+                    <label class="opt-label"><input type="radio" name="e3_4" value="b"><span class="radio"></span>sheep</label>
+                    <label class="opt-label"><input type="radio" name="e3_4" value="c"><span class="radio"></span>sheepes</label>
+                    <label class="opt-label"><input type="radio" name="e3_4" value="d"><span class="radio"></span>sheep's</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. The _____ of this research are very promising.</div>
+                <div class="options" id="e3_5_opts">
+                    <label class="opt-label"><input type="radio" name="e3_5" value="a"><span class="radio"></span>finding</label>
+                    <label class="opt-label"><input type="radio" name="e3_5" value="b"><span class="radio"></span>findings</label>
+                    <label class="opt-label"><input type="radio" name="e3_5" value="c"><span class="radio"></span>find</label>
+                    <label class="opt-label"><input type="radio" name="e3_5" value="d"><span class="radio"></span>found</label>
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx3()">Перевірити</button>
+            <div class="feedback" id="f3"></div>
+        </div>
+
+        <!-- EXERCISE 4: Translation -->
+        <div class="section">
+            <h2><span class="num">7</span>Вправа: перекладіть речення</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. Моя сестра дала мені чудову пораду.</div>
+                <input type="text" class="translate-input" id="e4_1" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. Поліція розслідує цю справу.</div>
+                <input type="text" class="translate-input" id="e4_2" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. У цьому стадіоні може вміститися велика кількість глядачів.</div>
+                <input type="text" class="translate-input" id="e4_3" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. Ці новини шокували всіх.</div>
+                <input type="text" class="translate-input" id="e4_4" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. Уряд оголосив нові правила.</div>
+                <input type="text" class="translate-input" id="e4_5" placeholder="Ваша відповідь">
+            </div>
+            <button class="check-btn" onclick="checkEx4()">Перевірити</button>
+            <div class="feedback" id="f4"></div>
+        </div>
+
+        <!-- EXERCISE 5: Error correction -->
+        <div class="section">
+            <h2><span class="num">8</span>Вправа: виправте помилки або оберіть правильний варіант</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. I need some advices about my career.</div>
+                <div class="options" id="e5_1_opts">
+                    <label class="opt-label"><input type="radio" name="e5_1" value="a"><span class="radio"></span>some advices</label>
+                    <label class="opt-label"><input type="radio" name="e5_1" value="b"><span class="radio"></span>an advice</label>
+                    <label class="opt-label"><input type="radio" name="e5_1" value="c"><span class="radio"></span>some advice</label>
+                    <label class="opt-label"><input type="radio" name="e5_1" value="d"><span class="radio"></span>some advises</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. The datas from the experiment are reliable.</div>
+                <div class="options" id="e5_2_opts">
+                    <label class="opt-label"><input type="radio" name="e5_2" value="a"><span class="radio"></span>The datas</label>
+                    <label class="opt-label"><input type="radio" name="e5_2" value="b"><span class="radio"></span>The data is</label>
+                    <label class="opt-label"><input type="radio" name="e5_2" value="c"><span class="radio"></span>The data are</label>
+                    <label class="opt-label"><input type="radio" name="e5_2" value="d"><span class="radio"></span>The datum are</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. There were many peoples at the concert.</div>
+                <div class="options" id="e5_3_opts">
+                    <label class="opt-label"><input type="radio" name="e5_3" value="a"><span class="radio"></span>many peoples</label>
+                    <label class="opt-label"><input type="radio" name="e5_3" value="b"><span class="radio"></span>much people</label>
+                    <label class="opt-label"><input type="radio" name="e5_3" value="c"><span class="radio"></span>many people</label>
+                    <label class="opt-label"><input type="radio" name="e5_3" value="d"><span class="radio"></span>many person</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. The news are not as bad as I expected.</div>
+                <div class="options" id="e5_4_opts">
+                    <label class="opt-label"><input type="radio" name="e5_4" value="a"><span class="radio"></span>The news are</label>
+                    <label class="opt-label"><input type="radio" name="e5_4" value="b"><span class="radio"></span>The news is</label>
+                    <label class="opt-label"><input type="radio" name="e5_4" value="c"><span class="radio"></span>The new is</label>
+                    <label class="opt-label"><input type="radio" name="e5_4" value="d"><span class="radio"></span>These news are</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. I bought two new furnitures for my flat.</div>
+                <div class="options" id="e5_5_opts">
+                    <label class="opt-label"><input type="radio" name="e5_5" value="a"><span class="radio"></span>two new furnitures</label>
+                    <label class="opt-label"><input type="radio" name="e5_5" value="b"><span class="radio"></span>two new furniture</label>
+                    <label class="opt-label"><input type="radio" name="e5_5" value="c"><span class="radio"></span>two pieces of new furniture</label>
+                    <label class="opt-label"><input type="radio" name="e5_5" value="d"><span class="radio"></span>two new pieces of furnitures</label>
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx5()">Перевірити</button>
+            <div class="feedback" id="f5"></div>
+        </div>
+
+        <!-- EXERCISE 6: Word Formation -->
+        <div class="section">
+            <h2><span class="num">9</span>Вправа: утворення іменників (Word Formation)</h2>
+            <p style="margin-bottom: 16px; color: var(--text-light);">Утворіть іменник від поданого слова та вставте у речення.</p>
+
+            <div class="exercise-item">
+                <div class="question">1. His _____ to quit the job surprised everyone. (DECIDE)</div>
+                <div class="exercise-text" style="margin-top: 8px;">
+                    His <input type="text" class="gap-input" id="e6_1" placeholder="іменник" style="width: 160px;"> surprised everyone.
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. There has been a significant _____ in technology. (DEVELOP)</div>
+                <div class="exercise-text" style="margin-top: 8px;">
+                    There has been a significant <input type="text" class="gap-input" id="e6_2" placeholder="іменник" style="width: 160px;"> in technology.
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. The _____ of the project took three years. (COMPLETE)</div>
+                <div class="exercise-text" style="margin-top: 8px;">
+                    The <input type="text" class="gap-input" id="e6_3" placeholder="іменник" style="width: 160px;"> of the project took three years.
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. Her _____ to details makes her an excellent editor. (ATTEND)</div>
+                <div class="exercise-text" style="margin-top: 8px;">
+                    Her <input type="text" class="gap-input" id="e6_4" placeholder="іменник" style="width: 160px;"> to details makes her an excellent editor.
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. The _____ between the two countries lasted for decades. (RELATION)</div>
+                <div class="exercise-text" style="margin-top: 8px;">
+                    The <input type="text" class="gap-input" id="e6_5" placeholder="іменник" style="width: 160px;"> between the two countries lasted for decades.
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx6()">Перевірити</button>
+            <div class="feedback" id="f6"></div>
+        </div>
+
+        <!-- FINAL SUMMARY -->
+        <div class="final-summary" id="finalSummary">
+            <h3>🎉 Вітаємо! Ви завершили тему</h3>
+            <p>Ось ваш підсумковий результат:</p>
+            <div class="summary-details">
+                <div class="summary-box"><div class="label">Всього балів</div><div class="value" id="totalScore">0/30</div></div>
+                <div class="summary-box"><div class="label">Текст із пропусками</div><div class="value" id="scoreEx1">0/5</div></div>
+                <div class="summary-box"><div class="label">Вибір форми</div><div class="value" id="scoreEx2">0/5</div></div>
+                <div class="summary-box"><div class="label">Контекст</div><div class="value" id="scoreEx3">0/5</div></div>
+                <div class="summary-box"><div class="label">Переклад</div><div class="value" id="scoreEx4">0/5</div></div>
+                <div class="summary-box"><div class="label">Виправлення</div><div class="value" id="scoreEx5">0/5</div></div>
+                <div class="summary-box"><div class="label">Word Formation</div><div class="value" id="scoreEx6">0/5</div></div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="sticky-result" id="stickyResult">
+        <span>Набрано:</span>
+        <span class="score" id="stickyScore">0/30</span>
+    </div>
+
+    <script>
+        let scores = { ex1: 0, ex2: 0, ex3: 0, ex4: 0, ex5: 0, ex6: 0 };
+        let checked = { ex1: false, ex2: false, ex3: false, ex4: false, ex5: false, ex6: false };
+
+        function updateSticky() {
+            const total = scores.ex1 + scores.ex2 + scores.ex3 + scores.ex4 + scores.ex5 + scores.ex6;
+            document.getElementById('stickyScore').textContent = total + '/30';
+            document.getElementById('stickyResult').classList.add('visible');
+
+            if (Object.values(checked).every(v => v)) {
+                document.getElementById('totalScore').textContent = total + '/30';
+                document.getElementById('scoreEx1').textContent = scores.ex1 + '/5';
+                document.getElementById('scoreEx2').textContent = scores.ex2 + '/5';
+                document.getElementById('scoreEx3').textContent = scores.ex3 + '/5';
+                document.getElementById('scoreEx4').textContent = scores.ex4 + '/5';
+                document.getElementById('scoreEx5').textContent = scores.ex5 + '/5';
+                document.getElementById('scoreEx6').textContent = scores.ex6 + '/5';
+                document.getElementById('finalSummary').classList.add('active');
+                document.getElementById('stickyResult').style.display = 'none';
+            }
+        }
+
+        function checkEx1() {
+            const answers = ['police', 'advice', 'brother-in-law', 'news', 'information'];
+            let correct = 0;
+            answers.forEach((ans, i) => {
+                const input = document.getElementById('e1_' + (i+1));
+                const val = input.value.trim().toLowerCase().replace(/[.,!?:;']/g, '');
+                if (val === ans) {
+                    input.classList.add('correct'); input.classList.remove('wrong');
+                    correct++;
+                } else {
+                    input.classList.add('wrong'); input.classList.remove('correct');
+                }
+            });
+            scores.ex1 = correct; checked.ex1 = true;
+            const fb = document.getElementById('f1');
+            fb.textContent = correct === 5 ? '✅ Відмінно! 5/5' : `❌ Результат: ${correct}/5. Перевірте помилки.`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : 'wrong');
+            updateSticky();
+        }
+
+        function checkEx2() {
+            const answers = { e2_1: 'a', e2_2: 'b', e2_3: 'c', e2_4: 'b', e2_5: 'c' };
+            let correct = 0;
+            for (let key in answers) {
+                const opts = document.getElementById(key + '_opts');
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                opts.querySelectorAll('.opt-label').forEach(label => {
+                    label.classList.add('disabled');
+                    const inp = label.querySelector('input');
+                    if (inp.value === answers[key]) label.classList.add('correct');
+                    else if (selected && inp === selected) label.classList.add('wrong');
+                });
+                if (selected && selected.value === answers[key]) correct++;
+            }
+            scores.ex2 = correct; checked.ex2 = true;
+            const fb = document.getElementById('f2');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx3() {
+            const answers = { e3_1: 'a', e3_2: 'b', e3_3: 'a', e3_4: 'b', e3_5: 'b' };
+            let correct = 0;
+            for (let key in answers) {
+                const opts = document.getElementById(key + '_opts');
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                opts.querySelectorAll('.opt-label').forEach(label => {
+                    label.classList.add('disabled');
+                    const inp = label.querySelector('input');
+                    if (inp.value === answers[key]) label.classList.add('correct');
+                    else if (selected && inp === selected) label.classList.add('wrong');
+                });
+                if (selected && selected.value === answers[key]) correct++;
+            }
+            scores.ex3 = correct; checked.ex3 = true;
+            const fb = document.getElementById('f3');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx4() {
+            const answers = [
+                ['my sister gave me some excellent advice', 'my sister gave me excellent advice'],
+                ['the police are investigating this case', 'the police is investigating this case', 'police are investigating this case'],
+                ['a large number of spectators can be accommodated in this stadium', 'this stadium can accommodate a large number of spectators', 'a large audience can be accommodated in this stadium'],
+                ['this news shocked everyone', 'the news shocked everyone', 'this news has shocked everyone', 'the news has shocked everyone'],
+                ['the government has announced new rules', 'the government announced new rules', 'government has announced new rules']
+            ];
+            let correct = 0;
+            answers.forEach((ansList, i) => {
+                const input = document.getElementById('e4_' + (i+1));
+                const val = input.value.trim().toLowerCase().replace(/[.,!?:;']/g, '');
+                const isCorrect = ansList.some(a => val === a.toLowerCase().replace(/[.,!?:;']/g, ''));
+                if (isCorrect) { input.classList.add('correct'); input.classList.remove('wrong'); correct++; }
+                else { input.classList.add('wrong'); input.classList.remove('correct'); }
+            });
+            scores.ex4 = correct; checked.ex4 = true;
+            const fb = document.getElementById('f4');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx5() {
+            const answers = { e5_1: 'c', e5_2: 'c', e5_3: 'c', e5_4: 'b', e5_5: 'c' };
+            let correct = 0;
+            for (let key in answers) {
+                const opts = document.getElementById(key + '_opts');
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                opts.querySelectorAll('.opt-label').forEach(label => {
+                    label.classList.add('disabled');
+                    const inp = label.querySelector('input');
+                    if (inp.value === answers[key]) label.classList.add('correct');
+                    else if (selected && inp === selected) label.classList.add('wrong');
+                });
+                if (selected && selected.value === answers[key]) correct++;
+            }
+            scores.ex5 = correct; checked.ex5 = true;
+            const fb = document.getElementById('f5');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx6() {
+            const answers = ['decision', 'development', 'completion', 'attention', 'relationship'];
+            let correct = 0;
+            answers.forEach((ans, i) => {
+                const input = document.getElementById('e6_' + (i+1));
+                const val = input.value.trim().toLowerCase();
+                if (val === ans) {
+                    input.classList.add('correct'); input.classList.remove('wrong');
+                    correct++;
+                } else {
+                    input.classList.add('wrong'); input.classList.remove('correct');
+                }
+            });
+            scores.ex6 = correct; checked.ex6 = true;
+            const fb = document.getElementById('f6');
+            fb.textContent = correct === 5 ? '✅ Відмінно! 5/5' : `❌ Результат: ${correct}/5. Перевірте правильність утворення іменника.`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : 'wrong');
+            updateSticky();
+        }
+    </script>
+</body>
+</html>
