@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Have Something Done — English NMT Prep</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #FDF8F3;
+            --bg-warm: #F5F0E8;
+            --text: #2D2A26;
+            --text-light: #6B6560;
+            --accent: #3D405B;
+            --accent-hover: #2F3247;
+            --green: #81B29A;
+            --green-bg: rgba(129,178,154,0.12);
+            --red: #C84B31;
+            --red-bg: rgba(200,75,49,0.08);
+            --card: #FFFFFF;
+            --shadow: rgba(45,42,38,0.06);
+            --shadow-hover: rgba(45,42,38,0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; height: 64px;
+            background: rgba(253,248,243,0.95); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(45,42,38,0.06);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 100;
+        }
+        .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+        .logo span { color: #E07A5F; }
+        .back-btn {
+            padding: 8px 20px; background: var(--card);
+            border: 1.5px solid rgba(45,42,38,0.1);
+            border-radius: 50px; text-decoration: none;
+            font-size: 14px; font-weight: 600; color: var(--text);
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(45,42,38,0.08); }
+
+        .main { padding-top: 100px; max-width: 800px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+        h1 { font-size: 34px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+        .breadcrumb { font-size: 14px; color: var(--text-light); margin-bottom: 40px; }
+
+        .section {
+            background: var(--card); border-radius: var(--radius);
+            padding: 28px 32px; margin-bottom: 20px;
+            box-shadow: 0 4px 24px var(--shadow);
+        }
+        .section h2 {
+            font-size: 20px; font-weight: 700; margin-bottom: 20px;
+            color: var(--accent); display: flex; align-items: center; gap: 10px;
+        }
+        .section h2 .num {
+            width: 32px; height: 32px; background: var(--accent);
+            color: white; border-radius: 50%; display: inline-flex;
+            align-items: center; justify-content: center; font-size: 14px;
+        }
+
+        .theory-block { margin-bottom: 24px; }
+        .theory-block:last-child { margin-bottom: 0; }
+        .theory-block h3 {
+            font-size: 18px; font-weight: 700; margin-bottom: 10px;
+            color: var(--text);
+        }
+        .theory-block p, .theory-block li {
+            font-size: 16px; line-height: 1.7; color: var(--text);
+            margin-bottom: 8px;
+        }
+        .theory-block ul { padding-left: 22px; margin-bottom: 12px; }
+
+        .example-box {
+            background: var(--bg-warm); border-left: 4px solid var(--accent);
+            padding: 12px 16px; border-radius: 0 10px 10px 0;
+            margin: 10px 0; font-size: 15px;
+        }
+        .example-box .en { color: var(--text); font-weight: 600; }
+        .example-box .ua { color: var(--text-light); font-size: 14px; margin-top: 4px; }
+
+        .exercise-item {
+            margin-bottom: 24px; padding-bottom: 24px;
+            border-bottom: 1px solid rgba(45,42,38,0.06);
+        }
+        .exercise-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+        .exercise-text {
+            background: var(--bg-warm); padding: 20px 22px;
+            border-radius: var(--radius-sm); margin-bottom: 20px;
+            font-size: 16px; line-height: 1.8;
+        }
+        .gap-input {
+            display: inline-block; width: 130px; padding: 6px 10px;
+            border: 2px solid rgba(45,42,38,0.15); border-radius: 8px;
+            font-size: 15px; text-align: center; outline: none;
+            margin: 0 4px; transition: border-color 0.2s;
+        }
+        .gap-input:focus { border-color: var(--accent); }
+        .gap-input.correct { border-color: var(--green); background: var(--green-bg); }
+        .gap-input.wrong { border-color: var(--red); background: var(--red-bg); }
+
+        .question { font-size: 16px; margin-bottom: 14px; font-weight: 600; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .opt-label {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 16px; background: var(--bg);
+            border-radius: var(--radius-sm); cursor: pointer;
+            transition: all 0.2s; border: 2px solid transparent;
+        }
+        .opt-label:hover { background: rgba(61,64,91,0.04); }
+        .opt-label input { display: none; }
+        .opt-label .radio {
+            width: 20px; height: 20px; border: 2px solid rgba(45,42,38,0.2);
+            border-radius: 50%; position: relative; flex-shrink: 0;
+        }
+        .opt-label input:checked + .radio { border-color: var(--accent); }
+        .opt-label input:checked + .radio::after {
+            content: ''; position: absolute; top: 3px; left: 3px;
+            width: 10px; height: 10px; background: var(--accent); border-radius: 50%;
+        }
+        .opt-label.correct { border-color: var(--green); background: var(--green-bg); }
+        .opt-label.wrong { border-color: var(--red); background: var(--red-bg); }
+        .opt-label.disabled { pointer-events: none; opacity: 0.7; }
+
+        .check-btn {
+            padding: 10px 24px; background: var(--accent); color: white;
+            border: none; border-radius: 8px; cursor: pointer;
+            font-size: 15px; font-weight: 600; transition: background 0.2s;
+            margin-top: 10px;
+        }
+        .check-btn:hover { background: var(--accent-hover); }
+        .check-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .feedback { margin-top: 10px; font-size: 15px; font-weight: 600; min-height: 22px; }
+        .feedback.correct { color: var(--green); }
+        .feedback.wrong { color: var(--red); }
+
+        .translate-input {
+            width: 100%; padding: 10px 14px; border: 2px solid rgba(45,42,38,0.15);
+            border-radius: 8px; font-size: 15px; outline: none; margin-top: 8px;
+        }
+        .translate-input:focus { border-color: var(--accent); }
+        .translate-input.correct { border-color: var(--green); background: var(--green-bg); }
+        .translate-input.wrong { border-color: var(--red); background: var(--red-bg); }
+
+        .sticky-result {
+            position: fixed; bottom: 20px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card); padding: 16px 32px;
+            border-radius: 50px; box-shadow: 0 12px 40px rgba(45,42,38,0.18);
+            font-size: 16px; font-weight: 700; z-index: 50;
+            display: flex; align-items: center; gap: 12px;
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+            border: 2px solid var(--accent);
+        }
+        .sticky-result.visible { transform: translateX(-50%) translateY(0); }
+        .sticky-result .score { color: var(--accent); font-size: 22px; }
+
+        .final-summary {
+            background: linear-gradient(135deg, var(--accent), #5E60A3);
+            color: white; padding: 28px 32px; border-radius: var(--radius);
+            margin-top: 32px; display: none;
+        }
+        .final-summary.active { display: block; animation: fadeIn 0.5s ease; }
+        .final-summary h3 { font-size: 22px; margin-bottom: 12px; }
+        .final-summary p { font-size: 16px; opacity: 0.95; }
+        .summary-details {
+            margin-top: 16px; display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;
+        }
+        .summary-box {
+            background: rgba(255,255,255,0.2); padding: 14px;
+            border-radius: var(--radius-sm); text-align: center;
+        }
+        .summary-box .label { font-size: 13px; opacity: 0.9; }
+        .summary-box .value { font-size: 24px; font-weight: 800; margin-top: 4px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 640px) {
+            .header { padding: 0 20px; }
+            h1 { font-size: 26px; }
+            .section { padding: 22px 20px; }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">English<span>NMT</span></div>
+        <a href="../index.html" class="back-btn">← На головну</a>
+    </header>
+
+    <main class="main">
+        <h1>Have Something Done</h1>
+        <div class="breadcrumb">Граматика → VERB → Have Something Done</div>
+
+        <!-- THEORY: Explanation -->
+        <div class="section">
+            <h2><span class="num">1</span>Пояснення теми</h2>
+            <p>Конструкція <strong>have something done</strong> (відома також як <em>Causative</em>) використовується тоді, коли ми <em>домовляємося</em> або <em>змушуємо когось</em> виконати певну роботу для нас замість того, щоб робити її самостійно. Це може стосуватися послуг (стрижка, ремонт, чистка) або неприємних ситуацій, що трапилися з нами (обкрадство, пошкодження майна).</p>
+            <p>Окрім основної конструкції, існують також споріднені структури: <strong>have somebody do something</strong> (змусити/попросити когось щось зробити) та <strong>get somebody to do something</strong> (переконати/домогтися, щоб хтось щось зробив). Розрізнення цих форм — одне з найпоширеніших завдань у тестах НМТ.</p>
+        </div>
+
+        <!-- THEORY: Rules -->
+        <div class="section">
+            <h2><span class="num">2</span>Правила та приклади використання</h2>
+
+            <div class="theory-block">
+                <h3>2.1 Have something done (Causative)</h3>
+                <p><strong>Утворення:</strong> have/get + object + Past Participle (V3)</p>
+                <p><strong>Вживання:</strong> коли ми платимо комусь за послугу або домовляємося, щоб хтось зробив роботу для нас.</p>
+                <div class="example-box">
+                    <div class="en">I <u>had my hair cut</u> yesterday. (перукар зробив це)</div>
+                    <div class="ua">Я вчора підстригся. (букв.: мені підстригли волосся)</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">We need to <u>have the car repaired</u>.</div>
+                    <div class="ua">Нам потрібно полагодити машину. (в майстерні)</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">She <u>had her passport stolen</u> on holiday. (неприємність)</div>
+                    <div class="ua">У неї вкрали паспорт у відпустці.</div>
+                </div>
+            </div>
+
+            <div class="theory-block">
+                <h3>2.2 Have somebody do something</h3>
+                <p><strong>Утворення:</strong> have + somebody + infinitive <strong>without to</strong></p>
+                <p><strong>Вживання:</strong> коли ми даємо комусь вказівку, змушуємо або просимо когось виконати дію.</p>
+                <div class="example-box">
+                    <div class="en">The boss <u>had his secretary type</u> the letters.</div>
+                    <div class="ua">Бос змусив свою секретарку надрукувати листи.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">I'll <u>have my son clean</u> his room.</div>
+                    <div class="ua">Я змушу свого сина прибрати кімнату.</div>
+                </div>
+            </div>
+
+            <div class="theory-block">
+                <h3>2.3 Get somebody to do something</h3>
+                <p><strong>Утворення:</strong> get + somebody + infinitive <strong>with to</strong></p>
+                <p><strong>Вживання:</strong> коли ми переконуємо, умовляємо або домагаємося, щоб хтось щось зробив.</p>
+                <div class="example-box">
+                    <div class="en">I <u>got my brother to help</u> me with the move.</div>
+                    <div class="ua">Я домовився з братом, щоб він допоміг мені з переїздом.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">She <u>got him to agree</u> finally.</div>
+                    <div class="ua">Вона нарешті схилила його до згоди.</div>
+                </div>
+            </div>
+
+            <div class="theory-block">
+                <h3>2.4 Get something done</h3>
+                <p><strong>Утворення:</strong> get + object + Past Participle (V3)</p>
+                <p><strong>Вживання:</strong> розмовний варіант <em>have something done</em>, часто вживається в неформальному спілкуванні.</p>
+                <div class="example-box">
+                    <div class="en">I need to <u>get my eyes tested</u>.</div>
+                    <div class="ua">Мені потрібно перевірити зір.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THEORY: Peculiarities -->
+        <div class="section">
+            <h2><span class="num">3</span>Особливості та типові помилки</h2>
+            <ul>
+                <li><strong>Have something done vs Do something yourself:</strong> <em>I cut my hair</em> = я сам підстригся; <em>I <u>had</u> my hair <u>cut</u></em> = мені підстригли в перукарні.</li>
+                <li><strong>Неприємні ситуації:</strong> <em>have something done</em> часто вживається для неприємних подій, які сталися не з нашої волі: <em>He <u>had his wallet stolen</u></em> (його обікрали).</li>
+                <li><strong>Різниця між have та get:</strong> <em>have somebody do</em> — без <u>to</u>; <em>get somebody to do</em> — з <u>to</u>. <em>I had him <u>call</u> me ❌ (якщо мали на увазі get) → I got him <u>to call</u> me ✅</em></li>
+                <li><strong>Passive meaning:</strong> у конструкції <em>have something done</em> дієслово завжди у формі Past Participle (V3), бо об'єкт зазнає дії.</li>
+                <li><strong>Часи:</strong> конструкція може вживатися в різних часах: <em>I <u>am having</u> the house painted</em> (Present Continuous), <em>I <u>had</u> the car fixed</em> (Past Simple), <em>I <u>will have</u> the report typed</em> (Future).</li>
+            </ul>
+        </div>
+
+        <!-- EXERCISE 1: Text gaps -->
+        <div class="section">
+            <h2><span class="num">4</span>Вправа: текст із пропусками</h2>
+            <div class="exercise-text">
+                I need to <input type="text" class="gap-input" id="e1_1" placeholder="1"> my hair <input type="text" class="gap-input" id="e1_2" placeholder="2"> (cut). She <input type="text" class="gap-input" id="e1_3" placeholder="3"> her car <input type="text" class="gap-input" id="e1_4" placeholder="4"> (repair) last week. We are <input type="text" class="gap-input" id="e1_5" placeholder="5"> our house <input type="text" class="gap-input" id="e1_6" placeholder="6"> (paint) at the moment. He <input type="text" class="gap-input" id="e1_7" placeholder="7"> his assistant <input type="text" class="gap-input" id="e1_8" placeholder="8"> (type) the report. They will <input type="text" class="gap-input" id="e1_9" placeholder="9"> the documents <input type="text" class="gap-input" id="e1_10" placeholder="10"> (translate).
+            </div>
+            <button class="check-btn" onclick="checkEx1()">Перевірити</button>
+            <div class="feedback" id="f1"></div>
+        </div>
+
+        <!-- EXERCISE 2: Multiple choice -->
+        <div class="section">
+            <h2><span class="num">5</span>Вправа: оберіть правильну форму</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. I need to ______ my car serviced.</div>
+                <div class="options" id="e2_1_opts">
+                    <label class="opt-label"><input type="radio" name="e2_1" value="a"><span class="radio"></span>have</label>
+                    <label class="opt-label"><input type="radio" name="e2_1" value="b"><span class="radio"></span>make</label>
+                    <label class="opt-label"><input type="radio" name="e2_1" value="c"><span class="radio"></span>let</label>
+                    <label class="opt-label"><input type="radio" name="e2_1" value="d"><span class="radio"></span>do</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. She ______ her hair dyed yesterday.</div>
+                <div class="options" id="e2_2_opts">
+                    <label class="opt-label"><input type="radio" name="e2_2" value="a"><span class="radio"></span>has</label>
+                    <label class="opt-label"><input type="radio" name="e2_2" value="b"><span class="radio"></span>had</label>
+                    <label class="opt-label"><input type="radio" name="e2_2" value="c"><span class="radio"></span>did</label>
+                    <label class="opt-label"><input type="radio" name="e2_2" value="d"><span class="radio"></span>made</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. We are ______ the windows cleaned tomorrow.</div>
+                <div class="options" id="e2_3_opts">
+                    <label class="opt-label"><input type="radio" name="e2_3" value="a"><span class="radio"></span>have</label>
+                    <label class="opt-label"><input type="radio" name="e2_3" value="b"><span class="radio"></span>having</label>
+                    <label class="opt-label"><input type="radio" name="e2_3" value="c"><span class="radio"></span>get</label>
+                    <label class="opt-label"><input type="radio" name="e2_3" value="d"><span class="radio"></span>got</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. He ______ the plumber fix the leak.</div>
+                <div class="options" id="e2_4_opts">
+                    <label class="opt-label"><input type="radio" name="e2_4" value="a"><span class="radio"></span>made</label>
+                    <label class="opt-label"><input type="radio" name="e2_4" value="b"><span class="radio"></span>had</label>
+                    <label class="opt-label"><input type="radio" name="e2_4" value="c"><span class="radio"></span>got</label>
+                    <label class="opt-label"><input type="radio" name="e2_4" value="d"><span class="radio"></span>did</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. I ______ my brother to help me.</div>
+                <div class="options" id="e2_5_opts">
+                    <label class="opt-label"><input type="radio" name="e2_5" value="a"><span class="radio"></span>made</label>
+                    <label class="opt-label"><input type="radio" name="e2_5" value="b"><span class="radio"></span>had</label>
+                    <label class="opt-label"><input type="radio" name="e2_5" value="c"><span class="radio"></span>got</label>
+                    <label class="opt-label"><input type="radio" name="e2_5" value="d"><span class="radio"></span>let</label>
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx2()">Перевірити</button>
+            <div class="feedback" id="f2"></div>
+        </div>
+
+        <!-- EXERCISE 3: Multiple choice context -->
+        <div class="section">
+            <h2><span class="num">6</span>Вправа: оберіть правильну відповідь</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. I ______ my passport stolen on holiday.</div>
+                <div class="options" id="e3_1_opts">
+                    <label class="opt-label"><input type="radio" name="e3_1" value="a"><span class="radio"></span>had</label>
+                    <label class="opt-label"><input type="radio" name="e3_1" value="b"><span class="radio"></span>got</label>
+                    <label class="opt-label"><input type="radio" name="e3_1" value="c"><span class="radio"></span>made</label>
+                    <label class="opt-label"><input type="radio" name="e3_1" value="d"><span class="radio"></span>did</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. She ______ her nails done at the salon.</div>
+                <div class="options" id="e3_2_opts">
+                    <label class="opt-label"><input type="radio" name="e3_2" value="a"><span class="radio"></span>did</label>
+                    <label class="opt-label"><input type="radio" name="e3_2" value="b"><span class="radio"></span>made</label>
+                    <label class="opt-label"><input type="radio" name="e3_2" value="c"><span class="radio"></span>had</label>
+                    <label class="opt-label"><input type="radio" name="e3_2" value="d"><span class="radio"></span>got</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. We need to ______ the carpet cleaned before the party.</div>
+                <div class="options" id="e3_3_opts">
+                    <label class="opt-label"><input type="radio" name="e3_3" value="a"><span class="radio"></span>have</label>
+                    <label class="opt-label"><input type="radio" name="e3_3" value="b"><span class="radio"></span>make</label>
+                    <label class="opt-label"><input type="radio" name="e3_3" value="c"><span class="radio"></span>let</label>
+                    <label class="opt-label"><input type="radio" name="e3_3" value="d"><span class="radio"></span>do</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. He ______ his employees work overtime.</div>
+                <div class="options" id="e3_4_opts">
+                    <label class="opt-label"><input type="radio" name="e3_4" value="a"><span class="radio"></span>made</label>
+                    <label class="opt-label"><input type="radio" name="e3_4" value="b"><span class="radio"></span>had</label>
+                    <label class="opt-label"><input type="radio" name="e3_4" value="c"><span class="radio"></span>got</label>
+                    <label class="opt-label"><input type="radio" name="e3_4" value="d"><span class="radio"></span>did</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. I finally ______ him to agree.</div>
+                <div class="options" id="e3_5_opts">
+                    <label class="opt-label"><input type="radio" name="e3_5" value="a"><span class="radio"></span>made</label>
+                    <label class="opt-label"><input type="radio" name="e3_5" value="b"><span class="radio"></span>had</label>
+                    <label class="opt-label"><input type="radio" name="e3_5" value="c"><span class="radio"></span>got</label>
+                    <label class="opt-label"><input type="radio" name="e3_5" value="d"><span class="radio"></span>let</label>
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx3()">Перевірити</button>
+            <div class="feedback" id="f3"></div>
+        </div>
+
+        <!-- EXERCISE 4: Translation -->
+        <div class="section">
+            <h2><span class="num">7</span>Вправа: перекладіть речення</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. Мені потрібно підстригтися.</div>
+                <input type="text" class="translate-input" id="e4_1" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. Вона зробила манікюр учора.</div>
+                <input type="text" class="translate-input" id="e4_2" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. Ми ремонтуємо дах. (домовилися з майстрами)</div>
+                <input type="text" class="translate-input" id="e4_3" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. Він змусив секретаря надрукувати листи.</div>
+                <input type="text" class="translate-input" id="e4_4" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. Я домовився, щоб мені доставили посилку.</div>
+                <input type="text" class="translate-input" id="e4_5" placeholder="Ваша відповідь">
+            </div>
+            <button class="check-btn" onclick="checkEx4()">Перевірити</button>
+            <div class="feedback" id="f4"></div>
+        </div>
+
+        <!-- EXERCISE 5: Error correction / Context -->
+        <div class="section">
+            <h2><span class="num">8</span>Вправа: виправте помилки або оберіть правильний варіант</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. I ______ my house painted last summer.</div>
+                <div class="options" id="e5_1_opts">
+                    <label class="opt-label"><input type="radio" name="e5_1" value="a"><span class="radio"></span>have</label>
+                    <label class="opt-label"><input type="radio" name="e5_1" value="b"><span class="radio"></span>had</label>
+                    <label class="opt-label"><input type="radio" name="e5_1" value="c"><span class="radio"></span>made</label>
+                    <label class="opt-label"><input type="radio" name="e5_1" value="d"><span class="radio"></span>did</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. She got her brother ______ her homework.</div>
+                <div class="options" id="e5_2_opts">
+                    <label class="opt-label"><input type="radio" name="e5_2" value="a"><span class="radio"></span>do</label>
+                    <label class="opt-label"><input type="radio" name="e5_2" value="b"><span class="radio"></span>to do</label>
+                    <label class="opt-label"><input type="radio" name="e5_2" value="c"><span class="radio"></span>did</label>
+                    <label class="opt-label"><input type="radio" name="e5_2" value="d"><span class="radio"></span>doing</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. The boss ______ the workers stay late.</div>
+                <div class="options" id="e5_3_opts">
+                    <label class="opt-label"><input type="radio" name="e5_3" value="a"><span class="radio"></span>made</label>
+                    <label class="opt-label"><input type="radio" name="e5_3" value="b"><span class="radio"></span>had</label>
+                    <label class="opt-label"><input type="radio" name="e5_3" value="c"><span class="radio"></span>got</label>
+                    <label class="opt-label"><input type="radio" name="e5_3" value="d"><span class="radio"></span>did</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. I need to ______ my eyes tested.</div>
+                <div class="options" id="e5_4_opts">
+                    <label class="opt-label"><input type="radio" name="e5_4" value="a"><span class="radio"></span>make</label>
+                    <label class="opt-label"><input type="radio" name="e5_4" value="b"><span class="radio"></span>have</label>
+                    <label class="opt-label"><input type="radio" name="e5_4" value="c"><span class="radio"></span>do</label>
+                    <label class="opt-label"><input type="radio" name="e5_4" value="d"><span class="radio"></span>did</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. He ______ his wallet stolen yesterday.</div>
+                <div class="options" id="e5_5_opts">
+                    <label class="opt-label"><input type="radio" name="e5_5" value="a"><span class="radio"></span>did</label>
+                    <label class="opt-label"><input type="radio" name="e5_5" value="b"><span class="radio"></span>made</label>
+                    <label class="opt-label"><input type="radio" name="e5_5" value="c"><span class="radio"></span>had</label>
+                    <label class="opt-label"><input type="radio" name="e5_5" value="d"><span class="radio"></span>got</label>
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx5()">Перевірити</button>
+            <div class="feedback" id="f5"></div>
+        </div>
+
+        <!-- FINAL SUMMARY -->
+        <div class="final-summary" id="finalSummary">
+            <h3>🎉 Вітаємо! Ви завершили тему</h3>
+            <p>Ось ваш підсумковий результат:</p>
+            <div class="summary-details">
+                <div class="summary-box"><div class="label">Всього балів</div><div class="value" id="totalScore">0/25</div></div>
+                <div class="summary-box"><div class="label">Текст із пропусками</div><div class="value" id="scoreEx1">0/5</div></div>
+                <div class="summary-box"><div class="label">Вибір форми</div><div class="value" id="scoreEx2">0/5</div></div>
+                <div class="summary-box"><div class="label">Контекст</div><div class="value" id="scoreEx3">0/5</div></div>
+                <div class="summary-box"><div class="label">Переклад</div><div class="value" id="scoreEx4">0/5</div></div>
+                <div class="summary-box"><div class="label">Виправлення</div><div class="value" id="scoreEx5">0/5</div></div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="sticky-result" id="stickyResult">
+        <span>Набрано:</span>
+        <span class="score" id="stickyScore">0/25</span>
+    </div>
+
+    <script>
+        let scores = { ex1: 0, ex2: 0, ex3: 0, ex4: 0, ex5: 0 };
+        let checked = { ex1: false, ex2: false, ex3: false, ex4: false, ex5: false };
+
+        function updateSticky() {
+            const total = scores.ex1 + scores.ex2 + scores.ex3 + scores.ex4 + scores.ex5;
+            document.getElementById('stickyScore').textContent = total + '/25';
+            document.getElementById('stickyResult').classList.add('visible');
+
+            if (Object.values(checked).every(v => v)) {
+                document.getElementById('totalScore').textContent = total + '/25';
+                document.getElementById('scoreEx1').textContent = scores.ex1 + '/5';
+                document.getElementById('scoreEx2').textContent = scores.ex2 + '/5';
+                document.getElementById('scoreEx3').textContent = scores.ex3 + '/5';
+                document.getElementById('scoreEx4').textContent = scores.ex4 + '/5';
+                document.getElementById('scoreEx5').textContent = scores.ex5 + '/5';
+                document.getElementById('finalSummary').classList.add('active');
+                document.getElementById('stickyResult').style.display = 'none';
+            }
+        }
+
+        function checkEx1() {
+            // 5 items, but some have 2 inputs. Let's map them:
+            // 1: have, cut
+            // 2: had, repaired
+            // 3: having, painted
+            // 4: had, type
+            // 5: have, translated
+            const answers = [
+                ['have','cut'],
+                ['had','repaired'],
+                ['having','painted'],
+                ['had','type'],
+                ['have','translated']
+            ];
+            let correct = 0;
+            answers.forEach((pair, i) => {
+                const in1 = document.getElementById('e1_' + (i*2+1));
+                const in2 = document.getElementById('e1_' + (i*2+2));
+                const v1 = in1.value.trim().toLowerCase();
+                const v2 = in2.value.trim().toLowerCase();
+                if (v1 === pair[0] && v2 === pair[1]) {
+                    in1.classList.add('correct'); in1.classList.remove('wrong');
+                    in2.classList.add('correct'); in2.classList.remove('wrong');
+                    correct++;
+                } else {
+                    in1.classList.add('wrong'); in1.classList.remove('correct');
+                    in2.classList.add('wrong'); in2.classList.remove('correct');
+                }
+            });
+            scores.ex1 = correct; checked.ex1 = true;
+            const fb = document.getElementById('f1');
+            fb.textContent = correct === 5 ? '✅ Відмінно! 5/5' : `❌ Результат: ${correct}/5. Перевірте помилки.`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : 'wrong');
+            updateSticky();
+        }
+
+        function checkEx2() {
+            const answers = { e2_1: 'a', e2_2: 'b', e2_3: 'b', e2_4: 'b', e2_5: 'c' };
+            let correct = 0;
+            for (let key in answers) {
+                const opts = document.getElementById(key + '_opts');
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                opts.querySelectorAll('.opt-label').forEach(label => {
+                    label.classList.add('disabled');
+                    const inp = label.querySelector('input');
+                    if (inp.value === answers[key]) label.classList.add('correct');
+                    else if (selected && inp === selected) label.classList.add('wrong');
+                });
+                if (selected && selected.value === answers[key]) correct++;
+            }
+            scores.ex2 = correct; checked.ex2 = true;
+            const fb = document.getElementById('f2');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx3() {
+            const answers = { e3_1: 'a', e3_2: 'c', e3_3: 'a', e3_4: 'b', e3_5: 'c' };
+            let correct = 0;
+            for (let key in answers) {
+                const opts = document.getElementById(key + '_opts');
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                opts.querySelectorAll('.opt-label').forEach(label => {
+                    label.classList.add('disabled');
+                    const inp = label.querySelector('input');
+                    if (inp.value === answers[key]) label.classList.add('correct');
+                    else if (selected && inp === selected) label.classList.add('wrong');
+                });
+                if (selected && selected.value === answers[key]) correct++;
+            }
+            scores.ex3 = correct; checked.ex3 = true;
+            const fb = document.getElementById('f3');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx4() {
+            const answers = [
+                ['i need to have my hair cut'],
+                ['she had her nails done yesterday'],
+                ['we are having the roof repaired', 'we are getting the roof repaired'],
+                ['he had his secretary type the letters'],
+                ['i had the parcel delivered', 'i got the parcel delivered']
+            ];
+            let correct = 0;
+            answers.forEach((ansList, i) => {
+                const input = document.getElementById('e4_' + (i+1));
+                const val = input.value.trim().toLowerCase().replace(/[.,!?:;]/g, '');
+                const isCorrect = ansList.some(a => val === a.toLowerCase().replace(/[.,!?:;]/g, ''));
+                if (isCorrect) { input.classList.add('correct'); input.classList.remove('wrong'); correct++; }
+                else { input.classList.add('wrong'); input.classList.remove('correct'); }
+            });
+            scores.ex4 = correct; checked.ex4 = true;
+            const fb = document.getElementById('f4');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx5() {
+            const answers = { e5_1: 'b', e5_2: 'b', e5_3: 'b', e5_4: 'b', e5_5: 'c' };
+            let correct = 0;
+            for (let key in answers) {
+                const opts = document.getElementById(key + '_opts');
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                opts.querySelectorAll('.opt-label').forEach(label => {
+                    label.classList.add('disabled');
+                    const inp = label.querySelector('input');
+                    if (inp.value === answers[key]) label.classList.add('correct');
+                    else if (selected && inp === selected) label.classList.add('wrong');
+                });
+                if (selected && selected.value === answers[key]) correct++;
+            }
+            scores.ex5 = correct; checked.ex5 = true;
+            const fb = document.getElementById('f5');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+    </script>
+</body>
+</html>

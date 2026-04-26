@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Used to. Be Used to. Get Used to — English NMT Prep</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #FDF8F3;
+            --bg-warm: #F5F0E8;
+            --text: #2D2A26;
+            --text-light: #6B6560;
+            --accent: #3D405B;
+            --accent-hover: #2F3247;
+            --green: #81B29A;
+            --green-bg: rgba(129,178,154,0.12);
+            --red: #C84B31;
+            --red-bg: rgba(200,75,49,0.08);
+            --card: #FFFFFF;
+            --shadow: rgba(45,42,38,0.06);
+            --shadow-hover: rgba(45,42,38,0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; height: 64px;
+            background: rgba(253,248,243,0.95); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(45,42,38,0.06);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 100;
+        }
+        .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+        .logo span { color: #E07A5F; }
+        .back-btn {
+            padding: 8px 20px; background: var(--card);
+            border: 1.5px solid rgba(45,42,38,0.1);
+            border-radius: 50px; text-decoration: none;
+            font-size: 14px; font-weight: 600; color: var(--text);
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(45,42,38,0.08); }
+
+        .main { padding-top: 100px; max-width: 800px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+        h1 { font-size: 34px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+        .breadcrumb { font-size: 14px; color: var(--text-light); margin-bottom: 40px; }
+
+        .section {
+            background: var(--card); border-radius: var(--radius);
+            padding: 28px 32px; margin-bottom: 20px;
+            box-shadow: 0 4px 24px var(--shadow);
+        }
+        .section h2 {
+            font-size: 20px; font-weight: 700; margin-bottom: 20px;
+            color: var(--accent); display: flex; align-items: center; gap: 10px;
+        }
+        .section h2 .num {
+            width: 32px; height: 32px; background: var(--accent);
+            color: white; border-radius: 50%; display: inline-flex;
+            align-items: center; justify-content: center; font-size: 14px;
+        }
+
+        .theory-block { margin-bottom: 24px; }
+        .theory-block:last-child { margin-bottom: 0; }
+        .theory-block h3 {
+            font-size: 18px; font-weight: 700; margin-bottom: 10px;
+            color: var(--text);
+        }
+        .theory-block p, .theory-block li {
+            font-size: 16px; line-height: 1.7; color: var(--text);
+            margin-bottom: 8px;
+        }
+        .theory-block ul { padding-left: 22px; margin-bottom: 12px; }
+
+        .example-box {
+            background: var(--bg-warm); border-left: 4px solid var(--accent);
+            padding: 12px 16px; border-radius: 0 10px 10px 0;
+            margin: 10px 0; font-size: 15px;
+        }
+        .example-box .en { color: var(--text); font-weight: 600; }
+        .example-box .ua { color: var(--text-light); font-size: 14px; margin-top: 4px; }
+
+        .exercise-item {
+            margin-bottom: 24px; padding-bottom: 24px;
+            border-bottom: 1px solid rgba(45,42,38,0.06);
+        }
+        .exercise-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+        .exercise-text {
+            background: var(--bg-warm); padding: 20px 22px;
+            border-radius: var(--radius-sm); margin-bottom: 20px;
+            font-size: 16px; line-height: 1.8;
+        }
+        .gap-input {
+            display: inline-block; width: 140px; padding: 6px 10px;
+            border: 2px solid rgba(45,42,38,0.15); border-radius: 8px;
+            font-size: 15px; text-align: center; outline: none;
+            margin: 0 4px; transition: border-color 0.2s;
+        }
+        .gap-input:focus { border-color: var(--accent); }
+        .gap-input.correct { border-color: var(--green); background: var(--green-bg); }
+        .gap-input.wrong { border-color: var(--red); background: var(--red-bg); }
+
+        .question { font-size: 16px; margin-bottom: 14px; font-weight: 600; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .opt-label {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 16px; background: var(--bg);
+            border-radius: var(--radius-sm); cursor: pointer;
+            transition: all 0.2s; border: 2px solid transparent;
+        }
+        .opt-label:hover { background: rgba(61,64,91,0.04); }
+        .opt-label input { display: none; }
+        .opt-label .radio {
+            width: 20px; height: 20px; border: 2px solid rgba(45,42,38,0.2);
+            border-radius: 50%; position: relative; flex-shrink: 0;
+        }
+        .opt-label input:checked + .radio { border-color: var(--accent); }
+        .opt-label input:checked + .radio::after {
+            content: ''; position: absolute; top: 3px; left: 3px;
+            width: 10px; height: 10px; background: var(--accent); border-radius: 50%;
+        }
+        .opt-label.correct { border-color: var(--green); background: var(--green-bg); }
+        .opt-label.wrong { border-color: var(--red); background: var(--red-bg); }
+        .opt-label.disabled { pointer-events: none; opacity: 0.7; }
+
+        .check-btn {
+            padding: 10px 24px; background: var(--accent); color: white;
+            border: none; border-radius: 8px; cursor: pointer;
+            font-size: 15px; font-weight: 600; transition: background 0.2s;
+            margin-top: 10px;
+        }
+        .check-btn:hover { background: var(--accent-hover); }
+        .check-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .feedback { margin-top: 10px; font-size: 15px; font-weight: 600; min-height: 22px; }
+        .feedback.correct { color: var(--green); }
+        .feedback.wrong { color: var(--red); }
+
+        .translate-input {
+            width: 100%; padding: 10px 14px; border: 2px solid rgba(45,42,38,0.15);
+            border-radius: 8px; font-size: 15px; outline: none; margin-top: 8px;
+        }
+        .translate-input:focus { border-color: var(--accent); }
+        .translate-input.correct { border-color: var(--green); background: var(--green-bg); }
+        .translate-input.wrong { border-color: var(--red); background: var(--red-bg); }
+
+        .sticky-result {
+            position: fixed; bottom: 20px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card); padding: 16px 32px;
+            border-radius: 50px; box-shadow: 0 12px 40px rgba(45,42,38,0.18);
+            font-size: 16px; font-weight: 700; z-index: 50;
+            display: flex; align-items: center; gap: 12px;
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+            border: 2px solid var(--accent);
+        }
+        .sticky-result.visible { transform: translateX(-50%) translateY(0); }
+        .sticky-result .score { color: var(--accent); font-size: 22px; }
+
+        .final-summary {
+            background: linear-gradient(135deg, var(--accent), #5E60A3);
+            color: white; padding: 28px 32px; border-radius: var(--radius);
+            margin-top: 32px; display: none;
+        }
+        .final-summary.active { display: block; animation: fadeIn 0.5s ease; }
+        .final-summary h3 { font-size: 22px; margin-bottom: 12px; }
+        .final-summary p { font-size: 16px; opacity: 0.95; }
+        .summary-details {
+            margin-top: 16px; display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;
+        }
+        .summary-box {
+            background: rgba(255,255,255,0.2); padding: 14px;
+            border-radius: var(--radius-sm); text-align: center;
+        }
+        .summary-box .label { font-size: 13px; opacity: 0.9; }
+        .summary-box .value { font-size: 24px; font-weight: 800; margin-top: 4px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 640px) {
+            .header { padding: 0 20px; }
+            h1 { font-size: 26px; }
+            .section { padding: 22px 20px; }
+        }
+    </style>
+    <base target="_blank">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">English<span>NMT</span></div>
+        <a href="../index.html" class="back-btn">← На головну</a>
+    </header>
+
+    <main class="main">
+        <h1>Used to. Be Used to. Get Used to</h1>
+        <div class="breadcrumb">Граматика → VERB → Used to. Be Used to. Get Used to</div>
+
+        <!-- THEORY: Explanation -->
+        <div class="section">
+            <h2><span class="num">1</span>Пояснення теми</h2>
+            <p>Три конструкції зі словом <strong>used to</strong> часто плутають між собою, але вони мають <em>різні значення та граматичні структури</strong>. Розуміння відмінностей між ними — важлива частина підготовки до НМТ, особливо в завданнях Use of English та Reading, де потрібно вловити нюанси значення.</p>
+            <p><strong>Used to + infinitive</strong> — минулий звичка або стан, якого більше немає.<br>
+            <strong>Be used to + noun/gerund</strong> — бути звиклим до чогось (стан зараз).<br>
+            <strong>Get used to + noun/gerund</strong> — звикати до чогось (процес).</p>
+        </div>
+
+        <!-- THEORY: Rules -->
+        <div class="section">
+            <h2><span class="num">2</span>Правила та приклади використання</h2>
+
+            <div class="theory-block">
+                <h3>2.1 Used to + Infinitive (Минула звичка / стан)</h3>
+                <p><strong>Утворення:</strong> used to + infinitive (без to)</p>
+                <p><strong>Вживання:</strong></p>
+                <ul>
+                    <li>Минула звичка, якої більше немає (порівняння минулого і тепер)</li>
+                    <li>Минулий стан, який змінився</li>
+                    <li>Минула дія, що регулярно повторювалась</li>
+                </ul>
+                <p><strong>Заперечення:</strong> didn't use to / used not to (didn't used to — неграмотно, але часто вживається в розмовній мові)</p>
+                <p><strong>Питання:</strong> Did you use to...? / Used you to...? (застаріла форма)</p>
+                <div class="example-box">
+                    <div class="en">I <u>used to play</u> football every day when I was a child. (а тепер ні)</div>
+                    <div class="ua">Я грав у футбол кожного дня, коли був малим.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">There <u>used to be</u> a cinema here, but now it's a supermarket.</div>
+                    <div class="ua">Тут раніше був кінотеатр, а тепер супермаркет.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">She <u>didn't use to</u> like coffee, but now she drinks it every morning.</div>
+                    <div class="ua">Раніше вона не любила каву, а тепер п'є щоранку.</div>
+                </div>
+            </div>
+
+            <div class="theory-block">
+                <h3>2.2 Be Used to + Noun / Gerund (Бути звиклим)</h3>
+                <p><strong>Утворення:</strong> be (am/is/are/was/were) + used to + noun / gerund (V-ing)</p>
+                <p><strong>Вживання:</strong></p>
+                <ul>
+                    <li>Опис звички, до якої людина вже звикла (стан, не дія)</li>
+                    <li>Може вживатися в будь-якому часі (present, past, future)</li>
+                    <li>Після to йде іменник або герундій, не інфінітив!</li>
+                </ul>
+                <div class="example-box">
+                    <div class="en">I <u>am used to</u> getting up early. (це вже звичка)</div>
+                    <div class="ua">Я звик рано вставати.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">She <u>wasn't used to</u> the cold weather in Canada at first.</div>
+                    <div class="ua">Спочатку вона не була звикла до холодної погоди в Канаді.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">You'll <u>be used to</u> the noise soon.</div>
+                    <div class="ua">Ти скоро звикнеш до шуму. (будеш звиклим)</div>
+                </div>
+            </div>
+
+            <div class="theory-block">
+                <h3>2.3 Get Used to + Noun / Gerund (Звикати)</h3>
+                <p><strong>Утворення:</strong> get / got / will get + used to + noun / gerund (V-ing)</p>
+                <p><strong>Вживання:</strong></p>
+                <ul>
+                    <li>Процес звикання до нової ситуації (зміна з "незвично" на "звично")</li>
+                    <li>Акцент на <em>процесі адаптації</em>, а не на результаті</li>
+                    <li>Часто вживається з slowly, gradually, eventually</li>
+                </ul>
+                <div class="example-box">
+                    <div class="en">I <u>am getting used to</u> living alone. (процес триває)</div>
+                    <div class="ua">Я звикаю жити сам.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">You'll <u>get used to</u> the new job in a few weeks.</div>
+                    <div class="ua">Ти звикнеш до нової роботи за кілька тижнів.</div>
+                </div>
+                <div class="example-box">
+                    <div class="en">It took me a while to <u>get used to</u> driving on the left.</div>
+                    <div class="ua">Мені знадобився час, щоб звикнути їздити ліворуч.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THEORY: Peculiarities -->
+        <div class="section">
+            <h2><span class="num">3</span>Особливості та типові помилки</h2>
+            <ul>
+                <li><strong>Used to vs Would:</strong> Would + infinitive теж описує минулу звичку, але <em>не вживається для станів</em>. Порівняй: <em>I used to be shy ✅ / I would be shy ❌</em>, але <em>I used to visit my grandma ✅ / I would visit my grandma ✅</em>.</li>
+                <li><strong>Найчастіша помилка:</strong> плутати <em>used to + infinitive</em> (минула звичка) з <em>be used to + gerund</em> (звикнути). Запам'ятай: після <strong>be/get used to</strong> завжди йде іменник або -ing форма!</li>
+                <li><strong>Заперечення used to:</strong> правильно <em>didn't use to</em> (без d на кінці), хоча в розмовній мові іноді кажуть didn't used to.</li>
+                <li><strong>There used to be:</strong> ця конструкція часто зустрічається в завданнях на перетворення речень (Key Word Transformation).</li>
+                <li><strong>Get used to vs Be used to:</strong> Get — процес (я ще звикаю), Be — стан (я вже звик). Порівняй: <em>I am getting used to the climate</em> (процес) vs <em>I am used to the climate</em> (стан).</li>
+                <li><strong>Used to в питаннях:</strong> Did you use to...? — найпоширеніша форма в сучасній англійській.</li>
+                <li><strong>Would для минулих звичок:</strong> Would часто вживається в художніх текстах для створення ностальгійного настрою, але тільки з діями, не зі станами.</li>
+            </ul>
+        </div>
+
+        <!-- EXERCISE 1: Text gaps -->
+        <div class="section">
+            <h2><span class="num">4</span>Вправа: текст із пропусками</h2>
+            <div class="exercise-text">
+                When I was young, I <input type="text" class="gap-input" id="e1_1" placeholder="1"> (live) in a small village. I <input type="text" class="gap-input" id="e1_2" placeholder="2"> (not / be) used to city life at all. It took me years to <input type="text" class="gap-input" id="e1_3" placeholder="3"> (get) used to the noise. Now I <input type="text" class="gap-input" id="e1_4" placeholder="4"> (be) used to waking up early. My grandmother <input type="text" class="gap-input" id="e1_5" placeholder="5"> (use to) tell us stories every evening.
+            </div>
+            <button class="check-btn" onclick="checkEx1()">Перевірити</button>
+            <div class="feedback" id="f1"></div>
+        </div>
+
+        <!-- EXERCISE 2: Multiple choice -->
+        <div class="section">
+            <h2><span class="num">5</span>Вправа: оберіть правильну конструкцію</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. I _____ coffee, but now I love it.</div>
+                <div class="options" id="e2_1_opts">
+                    <label class="opt-label"><input type="radio" name="e2_1" value="a"><span class="radio"></span>am not used to drinking</label>
+                    <label class="opt-label"><input type="radio" name="e2_1" value="b"><span class="radio"></span>didn't use to drink</label>
+                    <label class="opt-label"><input type="radio" name="e2_1" value="c"><span class="radio"></span>was not used to drink</label>
+                    <label class="opt-label"><input type="radio" name="e2_1" value="d"><span class="radio"></span>don't get used to drinking</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. She _____ in this company for ten years, so she _____ the rules.</div>
+                <div class="options" id="e2_2_opts">
+                    <label class="opt-label"><input type="radio" name="e2_2" value="a"><span class="radio"></span>has worked / used to</label>
+                    <label class="opt-label"><input type="radio" name="e2_2" value="b"><span class="radio"></span>worked / is used to</label>
+                    <label class="opt-label"><input type="radio" name="e2_2" value="c"><span class="radio"></span>has been working / is used to</label>
+                    <label class="opt-label"><input type="radio" name="e2_2" value="d"><span class="radio"></span>works / gets used to</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. _____ you _____ play the piano when you were younger?</div>
+                <div class="options" id="e2_3_opts">
+                    <label class="opt-label"><input type="radio" name="e2_3" value="a"><span class="radio"></span>Did / use to</label>
+                    <label class="opt-label"><input type="radio" name="e2_3" value="b"><span class="radio"></span>Were / used to</label>
+                    <label class="opt-label"><input type="radio" name="e2_3" value="c"><span class="radio"></span>Have / got used to</label>
+                    <label class="opt-label"><input type="radio" name="e2_3" value="d"><span class="radio"></span>Do / use to</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. It took him a long time to _____ the new time zone.</div>
+                <div class="options" id="e2_4_opts">
+                    <label class="opt-label"><input type="radio" name="e2_4" value="a"><span class="radio"></span>be used to</label>
+                    <label class="opt-label"><input type="radio" name="e2_4" value="b"><span class="radio"></span>get used to</label>
+                    <label class="opt-label"><input type="radio" name="e2_4" value="c"><span class="radio"></span>used to</label>
+                    <label class="opt-label"><input type="radio" name="e2_4" value="d"><span class="radio"></span>be getting used</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. There _____ a library here, but they demolished it.</div>
+                <div class="options" id="e2_5_opts">
+                    <label class="opt-label"><input type="radio" name="e2_5" value="a"><span class="radio"></span>is used to being</label>
+                    <label class="opt-label"><input type="radio" name="e2_5" value="b"><span class="radio"></span>used to be</label>
+                    <label class="opt-label"><input type="radio" name="e2_5" value="c"><span class="radio"></span>was used to be</label>
+                    <label class="opt-label"><input type="radio" name="e2_5" value="d"><span class="radio"></span>got used to being</label>
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx2()">Перевірити</button>
+            <div class="feedback" id="f2"></div>
+        </div>
+
+        <!-- EXERCISE 3: Multiple choice context -->
+        <div class="section">
+            <h2><span class="num">6</span>Вправа: оберіть правильну відповідь у контексті</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. I'm _____ the cold weather after living in Norway for two years.</div>
+                <div class="options" id="e3_1_opts">
+                    <label class="opt-label"><input type="radio" name="e3_1" value="a"><span class="radio"></span>used to</label>
+                    <label class="opt-label"><input type="radio" name="e3_1" value="b"><span class="radio"></span>use to</label>
+                    <label class="opt-label"><input type="radio" name="e3_1" value="c"><span class="radio"></span>got used to</label>
+                    <label class="opt-label"><input type="radio" name="e3_1" value="d"><span class="radio"></span>getting used to</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. My grandfather _____ walk 10 kilometres every day when he was in the army.</div>
+                <div class="options" id="e3_2_opts">
+                    <label class="opt-label"><input type="radio" name="e3_2" value="a"><span class="radio"></span>was used to</label>
+                    <label class="opt-label"><input type="radio" name="e3_2" value="b"><span class="radio"></span>would</label>
+                    <label class="opt-label"><input type="radio" name="e3_2" value="c"><span class="radio"></span>is used to</label>
+                    <label class="opt-label"><input type="radio" name="e3_2" value="d"><span class="radio"></span>gets used to</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. Don't worry, you'll soon _____ the new software.</div>
+                <div class="options" id="e3_3_opts">
+                    <label class="opt-label"><input type="radio" name="e3_3" value="a"><span class="radio"></span>use to</label>
+                    <label class="opt-label"><input type="radio" name="e3_3" value="b"><span class="radio"></span>be used to</label>
+                    <label class="opt-label"><input type="radio" name="e3_3" value="c"><span class="radio"></span>get used to</label>
+                    <label class="opt-label"><input type="radio" name="e3_3" value="d"><span class="radio"></span>used to</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. I _____ eat meat, but now I'm a vegetarian.</div>
+                <div class="options" id="e3_4_opts">
+                    <label class="opt-label"><input type="radio" name="e3_4" value="a"><span class="radio"></span>am used to</label>
+                    <label class="opt-label"><input type="radio" name="e3_4" value="b"><span class="radio"></span>used to</label>
+                    <label class="opt-label"><input type="radio" name="e3_4" value="c"><span class="radio"></span>was used to</label>
+                    <label class="opt-label"><input type="radio" name="e3_4" value="d"><span class="radio"></span>get used to</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. At first, the students _____ the heavy workload, but now they _____ it.</div>
+                <div class="options" id="e3_5_opts">
+                    <label class="opt-label"><input type="radio" name="e3_5" value="a"><span class="radio"></span>weren't used to / are getting used to</label>
+                    <label class="opt-label"><input type="radio" name="e3_5" value="b"><span class="radio"></span>didn't use to / got used to</label>
+                    <label class="opt-label"><input type="radio" name="e3_5" value="c"><span class="radio"></span>weren't used to / are used to</label>
+                    <label class="opt-label"><input type="radio" name="e3_5" value="d"><span class="radio"></span>used not to / are used to</label>
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx3()">Перевірити</button>
+            <div class="feedback" id="f3"></div>
+        </div>
+
+        <!-- EXERCISE 4: Translation -->
+        <div class="section">
+            <h2><span class="num">7</span>Вправа: перекладіть речення</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. Раніше я грав у теніс кожного тижня.</div>
+                <input type="text" class="translate-input" id="e4_1" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. Я звик прокидатися о 6 ранку.</div>
+                <input type="text" class="translate-input" id="e4_2" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. Вона звикає до нової школи.</div>
+                <input type="text" class="translate-input" id="e4_3" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. Тут раніше був старий парк.</div>
+                <input type="text" class="translate-input" id="e4_4" placeholder="Ваша відповідь">
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. Ми не звикли до такого холоду.</div>
+                <input type="text" class="translate-input" id="e4_5" placeholder="Ваша відповідь">
+            </div>
+            <button class="check-btn" onclick="checkEx4()">Перевірити</button>
+            <div class="feedback" id="f4"></div>
+        </div>
+
+        <!-- EXERCISE 5: Error correction -->
+        <div class="section">
+            <h2><span class="num">8</span>Вправа: виправте помилки або оберіть правильний варіант</h2>
+
+            <div class="exercise-item">
+                <div class="question">1. I am used to get up early every day.</div>
+                <div class="options" id="e5_1_opts">
+                    <label class="opt-label"><input type="radio" name="e5_1" value="a"><span class="radio"></span>used to get up</label>
+                    <label class="opt-label"><input type="radio" name="e5_1" value="b"><span class="radio"></span>used to getting up</label>
+                    <label class="opt-label"><input type="radio" name="e5_1" value="c"><span class="radio"></span>get used to get up</label>
+                    <label class="opt-label"><input type="radio" name="e5_1" value="d"><span class="radio"></span>am used to getting up</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. Did you used to swim when you were a child?</div>
+                <div class="options" id="e5_2_opts">
+                    <label class="opt-label"><input type="radio" name="e5_2" value="a"><span class="radio"></span>Did you use to swim</label>
+                    <label class="opt-label"><input type="radio" name="e5_2" value="b"><span class="radio"></span>Were you used to swim</label>
+                    <label class="opt-label"><input type="radio" name="e5_2" value="c"><span class="radio"></span>Did you used to swimming</label>
+                    <label class="opt-label"><input type="radio" name="e5_2" value="d"><span class="radio"></span>Have you got used to swim</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. She is getting used to live in a big city.</div>
+                <div class="options" id="e5_3_opts">
+                    <label class="opt-label"><input type="radio" name="e5_3" value="a"><span class="radio"></span>used to live</label>
+                    <label class="opt-label"><input type="radio" name="e5_3" value="b"><span class="radio"></span>get used to live</label>
+                    <label class="opt-label"><input type="radio" name="e5_3" value="c"><span class="radio"></span>getting used to living</label>
+                    <label class="opt-label"><input type="radio" name="e5_3" value="d"><span class="radio"></span>is used to live</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. I would be very shy when I was young.</div>
+                <div class="options" id="e5_4_opts">
+                    <label class="opt-label"><input type="radio" name="e5_4" value="a"><span class="radio"></span>would be</label>
+                    <label class="opt-label"><input type="radio" name="e5_4" value="b"><span class="radio"></span>used to be</label>
+                    <label class="opt-label"><input type="radio" name="e5_4" value="c"><span class="radio"></span>was used to being</label>
+                    <label class="opt-label"><input type="radio" name="e5_4" value="d"><span class="radio"></span>got used to be</label>
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. There used to being a shop on this corner.</div>
+                <div class="options" id="e5_5_opts">
+                    <label class="opt-label"><input type="radio" name="e5_5" value="a"><span class="radio"></span>used to being</label>
+                    <label class="opt-label"><input type="radio" name="e5_5" value="b"><span class="radio"></span>used to be</label>
+                    <label class="opt-label"><input type="radio" name="e5_5" value="c"><span class="radio"></span>was used to be</label>
+                    <label class="opt-label"><input type="radio" name="e5_5" value="d"><span class="radio"></span>got used to being</label>
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx5()">Перевірити</button>
+            <div class="feedback" id="f5"></div>
+        </div>
+
+        <!-- EXERCISE 6: Key Word Transformation -->
+        <div class="section">
+            <h2><span class="num">9</span>Вправа: перетворення речень (Key Word Transformation)</h2>
+            <p style="margin-bottom: 16px; color: var(--text-light);">Перепишіть речення, використовуючи слово в дужках. Не змінюйте це слово. Використовуйте від 2 до 5 слів.</p>
+
+            <div class="exercise-item">
+                <div class="question">1. I played basketball regularly when I was at school. (USED)</div>
+                <div class="exercise-text" style="margin-top: 8px;">
+                    I <input type="text" class="gap-input" id="e6_1" placeholder="2-5 слів" style="width: 200px;"> basketball when I was at school.
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">2. Living in a noisy city doesn't bother me anymore. (USED)</div>
+                <div class="exercise-text" style="margin-top: 8px;">
+                    I <input type="text" class="gap-input" id="e6_2" placeholder="2-5 слів" style="width: 200px;"> in a noisy city.
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">3. It was difficult for him to adapt to the new schedule at first. (GET)</div>
+                <div class="exercise-text" style="margin-top: 8px;">
+                    He found it hard to <input type="text" class="gap-input" id="e6_3" placeholder="2-5 слів" style="width: 200px;"> the new schedule at first.
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">4. In the past, there was a cinema on this street. (USED)</div>
+                <div class="exercise-text" style="margin-top: 8px;">
+                    There <input type="text" class="gap-input" id="e6_4" placeholder="2-5 слів" style="width: 200px;"> on this street.
+                </div>
+            </div>
+            <div class="exercise-item">
+                <div class="question">5. She is becoming accustomed to working from home. (GETTING)</div>
+                <div class="exercise-text" style="margin-top: 8px;">
+                    She <input type="text" class="gap-input" id="e6_5" placeholder="2-5 слів" style="width: 200px;"> working from home.
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkEx6()">Перевірити</button>
+            <div class="feedback" id="f6"></div>
+        </div>
+
+        <!-- FINAL SUMMARY -->
+        <div class="final-summary" id="finalSummary">
+            <h3>🎉 Вітаємо! Ви завершили тему</h3>
+            <p>Ось ваш підсумковий результат:</p>
+            <div class="summary-details">
+                <div class="summary-box"><div class="label">Всього балів</div><div class="value" id="totalScore">0/30</div></div>
+                <div class="summary-box"><div class="label">Текст із пропусками</div><div class="value" id="scoreEx1">0/5</div></div>
+                <div class="summary-box"><div class="label">Вибір конструкції</div><div class="value" id="scoreEx2">0/5</div></div>
+                <div class="summary-box"><div class="label">Контекст</div><div class="value" id="scoreEx3">0/5</div></div>
+                <div class="summary-box"><div class="label">Переклад</div><div class="value" id="scoreEx4">0/5</div></div>
+                <div class="summary-box"><div class="label">Виправлення</div><div class="value" id="scoreEx5">0/5</div></div>
+                <div class="summary-box"><div class="label">Key Word</div><div class="value" id="scoreEx6">0/5</div></div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="sticky-result" id="stickyResult">
+        <span>Набрано:</span>
+        <span class="score" id="stickyScore">0/30</span>
+    </div>
+
+    <script>
+        let scores = { ex1: 0, ex2: 0, ex3: 0, ex4: 0, ex5: 0, ex6: 0 };
+        let checked = { ex1: false, ex2: false, ex3: false, ex4: false, ex5: false, ex6: false };
+
+        function updateSticky() {
+            const total = scores.ex1 + scores.ex2 + scores.ex3 + scores.ex4 + scores.ex5 + scores.ex6;
+            document.getElementById('stickyScore').textContent = total + '/30';
+            document.getElementById('stickyResult').classList.add('visible');
+
+            if (Object.values(checked).every(v => v)) {
+                document.getElementById('totalScore').textContent = total + '/30';
+                document.getElementById('scoreEx1').textContent = scores.ex1 + '/5';
+                document.getElementById('scoreEx2').textContent = scores.ex2 + '/5';
+                document.getElementById('scoreEx3').textContent = scores.ex3 + '/5';
+                document.getElementById('scoreEx4').textContent = scores.ex4 + '/5';
+                document.getElementById('scoreEx5').textContent = scores.ex5 + '/5';
+                document.getElementById('scoreEx6').textContent = scores.ex6 + '/5';
+                document.getElementById('finalSummary').classList.add('active');
+                document.getElementById('stickyResult').style.display = 'none';
+            }
+        }
+
+        function checkEx1() {
+            const answers = ['used to live', 'was not', 'get', 'am', 'used to'];
+            let correct = 0;
+            answers.forEach((ans, i) => {
+                const input = document.getElementById('e1_' + (i+1));
+                const val = input.value.trim().toLowerCase();
+                if (val === ans) {
+                    input.classList.add('correct'); input.classList.remove('wrong');
+                    correct++;
+                } else {
+                    input.classList.add('wrong'); input.classList.remove('correct');
+                }
+            });
+            scores.ex1 = correct; checked.ex1 = true;
+            const fb = document.getElementById('f1');
+            fb.textContent = correct === 5 ? '✅ Відмінно! 5/5' : `❌ Результат: ${correct}/5. Перевірте помилки.`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : 'wrong');
+            updateSticky();
+        }
+
+        function checkEx2() {
+            const answers = { e2_1: 'b', e2_2: 'c', e2_3: 'a', e2_4: 'b', e2_5: 'b' };
+            let correct = 0;
+            for (let key in answers) {
+                const opts = document.getElementById(key + '_opts');
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                opts.querySelectorAll('.opt-label').forEach(label => {
+                    label.classList.add('disabled');
+                    const inp = label.querySelector('input');
+                    if (inp.value === answers[key]) label.classList.add('correct');
+                    else if (selected && inp === selected) label.classList.add('wrong');
+                });
+                if (selected && selected.value === answers[key]) correct++;
+            }
+            scores.ex2 = correct; checked.ex2 = true;
+            const fb = document.getElementById('f2');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx3() {
+            const answers = { e3_1: 'a', e3_2: 'b', e3_3: 'c', e3_4: 'b', e3_5: 'c' };
+            let correct = 0;
+            for (let key in answers) {
+                const opts = document.getElementById(key + '_opts');
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                opts.querySelectorAll('.opt-label').forEach(label => {
+                    label.classList.add('disabled');
+                    const inp = label.querySelector('input');
+                    if (inp.value === answers[key]) label.classList.add('correct');
+                    else if (selected && inp === selected) label.classList.add('wrong');
+                });
+                if (selected && selected.value === answers[key]) correct++;
+            }
+            scores.ex3 = correct; checked.ex3 = true;
+            const fb = document.getElementById('f3');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx4() {
+            const answers = [
+                ['i used to play tennis every week', 'i used to play tennis every week.'],
+                ['i am used to getting up at 6 am', 'i am used to getting up at six', 'i am used to waking up at 6 am', 'i am used to waking up at six'],
+                ['she is getting used to the new school', 'she is getting used to her new school', 'she gets used to the new school'],
+                ['there used to be an old park here', 'there used to be a park here'],
+                ['we are not used to such cold', 'we arent used to such cold', 'we are not used to this cold', 'we arent used to this cold']
+            ];
+            let correct = 0;
+            answers.forEach((ansList, i) => {
+                const input = document.getElementById('e4_' + (i+1));
+                const val = input.value.trim().toLowerCase().replace(/[.,!?:;']/g, '');
+                const isCorrect = ansList.some(a => val === a.toLowerCase().replace(/[.,!?:;']/g, ''));
+                if (isCorrect) { input.classList.add('correct'); input.classList.remove('wrong'); correct++; }
+                else { input.classList.add('wrong'); input.classList.remove('correct'); }
+            });
+            scores.ex4 = correct; checked.ex4 = true;
+            const fb = document.getElementById('f4');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx5() {
+            const answers = { e5_1: 'd', e5_2: 'a', e5_3: 'c', e5_4: 'b', e5_5: 'b' };
+            let correct = 0;
+            for (let key in answers) {
+                const opts = document.getElementById(key + '_opts');
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                opts.querySelectorAll('.opt-label').forEach(label => {
+                    label.classList.add('disabled');
+                    const inp = label.querySelector('input');
+                    if (inp.value === answers[key]) label.classList.add('correct');
+                    else if (selected && inp === selected) label.classList.add('wrong');
+                });
+                if (selected && selected.value === answers[key]) correct++;
+            }
+            scores.ex5 = correct; checked.ex5 = true;
+            const fb = document.getElementById('f5');
+            fb.textContent = `Результат: ${correct}/5`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : (correct >= 3 ? '' : 'wrong'));
+            updateSticky();
+        }
+
+        function checkEx6() {
+            const answers = [
+                ['used to play'],
+                ['am used to living', 'm used to living'],
+                ['get used to'],
+                ['used to be a cinema', 'used to be cinema'],
+                ['is getting used to']
+            ];
+            let correct = 0;
+            answers.forEach((ansList, i) => {
+                const input = document.getElementById('e6_' + (i+1));
+                const val = input.value.trim().toLowerCase().replace(/[.,!?:;']/g, '');
+                const isCorrect = ansList.some(a => val === a.toLowerCase().replace(/[.,!?:;']/g, ''));
+                if (isCorrect) { input.classList.add('correct'); input.classList.remove('wrong'); correct++; }
+                else { input.classList.add('wrong'); input.classList.remove('correct'); }
+            });
+            scores.ex6 = correct; checked.ex6 = true;
+            const fb = document.getElementById('f6');
+            fb.textContent = correct === 5 ? '✅ Відмінно! 5/5' : `❌ Результат: ${correct}/5. Перевірте форму слова та кількість слів.`;
+            fb.className = 'feedback ' + (correct === 5 ? 'correct' : 'wrong');
+            updateSticky();
+        }
+    </script>
+</body>
+</html>
